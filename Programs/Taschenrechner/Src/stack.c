@@ -2,35 +2,61 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
 #define STACK_SIZE 10
 
-int32_t numStack[STACK_SIZE - 1];
-int stackPointer = 0;
+typedef struct {
+    int arr[STACK_SIZE];
+    int sp;
+} Stack;
 
-bool isStackFull()
+void initStack(Stack *stack)
 {
-    return sizeof(numStack) == STACK_SIZE;
+    stack->sp = 0;
 }
 
-int push(T_token token)
+bool isFull(Stack *stack)
 {
-    if(!isStackFull())
+    return stack->sp == STACK_SIZE;
+}
+
+bool isEmpty(Stack *stack)
+{
+    return stack->sp == 0;
+}
+
+int push(T_token token, Stack *stack)
+{
+    if(!isFull(stack))
     {
-        stackPointer++;
-        numStack[stackPointer] = token.val;
+        stack->arr[stack->sp] = token.value;
+        stack->sp++;
         return 0;
     }
-    else {return 1;}
-
+    else return -1;
 }
 
-int pop()
+int pop(Stack *stack, int *target)
 {   
-    return 0;
+    if(!isEmpty(stack)) 
+    {
+        *target = stack->arr[stack->sp - 1];
+        stack->sp--;
+        return 0;
+    }
+    else return 1;
 }
 
-int peek()
+int peek(Stack *stack,int *top)
 {
-    return numStack[stackPointer];
+    if(stack->sp > 0)
+    {
+         *top = stack->arr[stack->sp - 1];
+        return 0;
+    }
+    else 
+    {
+        return 1;
+    }
 }
 

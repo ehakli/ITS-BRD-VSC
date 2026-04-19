@@ -193,6 +193,8 @@ project:
         - file: ../../../../Downloads/OneDrive_1_4-14-2026/display.c
         - file: ../../../../Downloads/OneDrive_1_4-14-2026/scanner.c
         - file: Src/stack.c
+        - file: stack.h
+        - file: arithmetic.c
 
   components:
     - component: ARM::CMSIS:CORE
