@@ -182,20 +182,19 @@ project:
     - group: Program/User/Inc
       files:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
-        - file: ../../../../Downloads/OneDrive_1_4-14-2026/display.h
-        - file: ../../../../Downloads/OneDrive_1_4-14-2026/scanner.h
-        - file: ../../../../Downloads/OneDrive_1_4-14-2026/token.h
+        - file: Inc/display.h
+        - file: Inc/scanner.h
+        - file: Inc/token.h
+        - file: Inc/operation.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
       files:
         - file: Src/main.c
-        - file: ../../../../Downloads/OneDrive_1_4-14-2026/display.c
-        - file: ../../../../Downloads/OneDrive_1_4-14-2026/scanner.c
+        - file: Src/display.c
+        - file: Src/scanner.c
         - file: Src/stack.c
-        - file: stack.h
-        - file: operation.c
-        - file: operation.h
+        - file: Src/operation.c
 
   components:
     - component: ARM::CMSIS:CORE

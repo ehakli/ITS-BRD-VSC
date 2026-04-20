@@ -1,6 +1,6 @@
 CompileFlags:
   CompilationDatabase: >-
-    /Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/out/Taschenrechner/ITSboard/Debug
+    /Users/ehakli/ITS-BRD-VSC/Programs/Taschenrechner/out/Taschenrechner/ITSboard/Debug
   Add:
     - "-D_ILP32=1\r\n"
     - "-D_USE_STATIC_INLINE=1\r\n"
