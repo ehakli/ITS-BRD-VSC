@@ -1,0 +1,8 @@
+{
+    "debug.hideSlowPreLaunchWarning": true,
+    "debug.showInStatusBar": "never",
+    "clangd.arguments": [
+        "--compile-commands-dir=/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/out/Taschenrechner/ITSboard/Debug"
+    ],
+    "cmake.sourceDirectory": "/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/tmp/Taschenrechner.Debug+ITSboard"
+}
