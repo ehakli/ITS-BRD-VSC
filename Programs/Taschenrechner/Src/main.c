@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    main.c
   * @author  Franz Korf
-  * @brief   Kleines Testprogramm fuer neu erstelle Fonts.
+  * @brief   Kleines Testprogramm fuer neu erstelle Fonts. pommes
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/

@@ -1,6 +1,5 @@
 CompileFlags:
-  CompilationDatabase: >-
-    /Users/ehakli/ITS-BRD-VSC/Programs/Taschenrechner/out/Taschenrechner/ITSboard/Debug
+  CompilationDatabase: c:\VS\ITS-BRD-VSC\Programs\Taschenrechner\out\Taschenrechner\ITSboard\Debug
   Add:
     - "-D_ILP32=1\r\n"
     - "-D_USE_STATIC_INLINE=1\r\n"
@@ -412,29 +411,24 @@ CompileFlags:
     - "-D__thumb2__=1\r\n"
     - "-D__thumb__=1\r\n"
     - '-D__ARMCOMPILER_LIBCXX=1'
-    - '-I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/Inc'
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Include
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Include
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/STM32F4xx_HAL_Driver/Inc
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/STM32F4xx_HAL_Driver/Inc
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/BSP/STM32F4xx_Nucleo_144
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/BSP/STM32F4xx_Nucleo_144
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Utilities/Fonts
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Utilities/Fonts
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../DisplayWaveshare/Inc'
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../DisplayWaveshare/Inc
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Utilities/AddFonts
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Utilities/AddFonts
+      -IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/tmp/Taschenrechner.Debug+ITSboard
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/RTE/_Debug_ITSboard'
+    - '-IC:/Users/Timo/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include'
     - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/tmp/Taschenrechner.Debug+ITSboard
-    - '-I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/RTE/_Debug_ITSboard'
-    - '-I/Users/ehakli/.cache/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include'
-    - >-
-      -I/Users/ehakli/.cache/arm/packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Inc
-    - >-
-      -I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/../../../../Downloads/OneDrive_1_4-14-2026
-    - '-I/Users/ehakli/GS/ITS-BRD-VSC/Programs/Taschenrechner/.'
+      -IC:/Users/Timo/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Inc'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Taschenrechner/Inc'
