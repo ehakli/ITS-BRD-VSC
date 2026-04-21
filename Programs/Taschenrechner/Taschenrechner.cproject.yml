@@ -186,6 +186,7 @@ project:
         - file: Inc/scanner.h
         - file: Inc/token.h
         - file: Inc/operation.h
+        - file: errorhandler.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -195,6 +196,7 @@ project:
         - file: Src/scanner.c
         - file: Src/stack.c
         - file: Src/operation.c
+        - file: errorhandler.c
 
   components:
     - component: ARM::CMSIS:CORE

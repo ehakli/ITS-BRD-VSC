@@ -43,10 +43,32 @@ int main(void) {
 
 	while(1)
 	{
-		//char c = getKeyPadInput();
-		// printToEchoLine(c);
-
 		T_token currentToken = nextToken();
+		int val1, val2, val3, status;
+
+		switch (currentToken.tok)
+		{
+			case NUMBER:
+				status = push(currentToken.val, &stack);
+				break;
+
+
+			case PLUS:
+			case MINUS:
+			case MULT:
+			case DIV:
+				pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
+				pop(&stack, &val2);
+
+				doArithmeticOperation(val1, val2, currentToken.tok, &val3);
+				push(val3, &stack); 
+
+			case CLEAR:
+				break;
+		}
+
+
+		/* T_token currentToken = nextToken();
 		if(currentToken.tok == NUMBER)
 		{
 			push(currentToken.val, &stack);
@@ -61,7 +83,7 @@ int main(void) {
 
 			doArithmeticOperation(val1, val2, currentToken.tok, &val3);
 			push(val3, &stack);
-		}
+		} */
 	}
 
   /* Begruessungstext	
