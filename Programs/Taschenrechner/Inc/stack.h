@@ -32,6 +32,6 @@ int push(int value, Stack *stack);
 
 int pop(Stack *stack, int *target);
 
-int peek(Stack *stack,int *top);
+int peek(Stack *stack, int *top);
 
 #endif /* STACK_H */
