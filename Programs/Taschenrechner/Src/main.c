@@ -52,15 +52,31 @@ int main(void) {
 		{
 			case NUMBER:
 				status = push(currentToken.val, &stack);
-				// convertAndPrint(currentToken.val);
 				break;
-			case PLUS: case MINUS: case MULT: case DIV:
-				pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
-				pop(&stack, &val2);
 
-				status = doArithmeticOperation(val1, val2, currentToken.tok, &val3);
-				push(val3, &stack); 
+			case PLUS:
+				status = add(&stack);
 				break;
+
+			case MINUS: 
+				status = sub(&stack);
+				break;
+
+			case MULT: 
+				status = mul(&stack);
+				break;
+
+			case DIV:
+				status = divi(&stack);
+				break;
+
+
+				//pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
+				//pop(&stack, &val2);
+
+				//status = doArithmeticOperation(val1, val2, currentToken.tok, &val3);
+				//push(val3, &stack); 
+				//break;
 
 			case CLEAR:
 				stack.sp = 0;
@@ -70,13 +86,14 @@ int main(void) {
 				if(stack.sp == 0)
 				{
 					status = STACK_UNDERFLOW;
-					break;
 				}
+
 				else 
 				{
 				peek(&stack, &val1);
 				convertAndPrint(val1);
 				}
+				break;
 
 			case SWAP:
 				if(stack.sp < 2)
@@ -88,7 +105,7 @@ int main(void) {
 				{
 					pop(&stack, &val1);
 					pop(&stack, &val2);
-					
+
 					push(val1, &stack);
 					push(val2, &stack);
 				}

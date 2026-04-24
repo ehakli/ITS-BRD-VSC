@@ -10,3 +10,11 @@ int doStackOperation (Stack *stack, char operator);
 int reverseString(char *str);
 
 int intToString(int num, char *str);
+
+int add(Stack *stack);
+
+int sub(Stack *stack);
+
+int mul(Stack *stack);
+
+int divi(Stack *stack);

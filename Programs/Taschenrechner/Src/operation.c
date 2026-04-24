@@ -3,6 +3,55 @@
 #include "stack.h"
 #include <stdbool.h>
 
+int val1, val2, val3;
+
+int add(Stack *stack)
+{
+
+    pop(stack, &val1);
+	pop(stack, &val2);
+
+    val3 = val1 + val2;
+    push(val3, stack);
+
+    return 0;
+
+}
+
+int sub(Stack *stack)
+{
+    pop(stack, &val1);
+    pop(stack, &val2);
+
+    val3 = val1 - val2;
+    push(val3, stack);
+
+    return 0;
+}
+
+int mul(Stack *stack)
+{
+    pop(stack, &val1);
+    pop(stack, &val2);
+
+    val3 = val1 * val2;
+    push(val3, stack);
+
+    return 0;
+}
+
+int divi(Stack *stack)
+{
+    pop(stack, &val1);
+    pop(stack, &val2);
+
+    val3 = val2 / val1;
+    push(val3, stack);
+
+    return 0;
+}
+
+
 int doArithmeticOperation(int val1, int val2, char operator, int* target) 
 {
     switch (operator) 
