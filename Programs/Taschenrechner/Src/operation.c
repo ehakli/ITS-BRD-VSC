@@ -2,16 +2,24 @@
 #include <stdlib.h>
 #include "stack.h"
 #include <stdbool.h>
+#include "errorhandler.h"
 
-int val1, val2, val3;
 
 int add(Stack *stack)
 {
+    int val1, val2;
 
-    pop(stack, &val1);
-	pop(stack, &val2);
+    int status = pop(stack, &val1);
 
-    val3 = val1 + val2;
+    if(status != SUCCESS) return status; 
+
+	status = pop(stack, &val2);
+
+    if(status != 0) return status; 
+    
+
+    int val3 = val1 + val2;
+    
     push(val3, stack);
 
     return 0;

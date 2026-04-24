@@ -105,7 +105,7 @@ int main(void) {
 				{
 					pop(&stack, &val1);
 					pop(&stack, &val2);
-
+					
 					push(val1, &stack);
 					push(val2, &stack);
 				}
