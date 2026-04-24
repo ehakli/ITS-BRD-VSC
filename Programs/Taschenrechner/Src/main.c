@@ -27,6 +27,12 @@
 // Tokens müssen nicht großartig behandelt werden, nur verarbeitet. Mit stdio print die fehlercodes, immer call by reference, alles 
 // müsste ein int return haben um fehler codes zu haben, method für errorhandling, operationen hardcoden.
 
+void convertAndPrint(int number)
+{
+	char print[12];
+	intToString(number, print);
+	printStdout(print);
+}
 
 // 
 int main(void) {
@@ -46,18 +52,9 @@ int main(void) {
 		{
 			case NUMBER:
 				status = push(currentToken.val, &stack);
-				char print[12];
-				intToString(currentToken.val, print);
-				printStdout(print);
-				printStdout("\n");
-
+				convertAndPrint(currentToken.val);
 				break;
-
-
-			case PLUS:
-			case MINUS:
-			case MULT:
-			case DIV:
+			case PLUS: case MINUS: case MULT: case DIV:
 				pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
 				pop(&stack, &val2);
 
@@ -66,35 +63,27 @@ int main(void) {
 				break;
 
 			case CLEAR:
+				stack.sp = 0;
 				break;
+
+			case PRT:
+				int print;
+				peek(&stack, &print);
+				convertAndPrint(print);
+
+				
+
 		}
-
-
-		/* T_token currentToken = nextToken();
-		if(currentToken.tok == NUMBER)
-		{
-			push(currentToken.val, &stack);
-		}
-		else 
-		{
-			
-			int val1, val2, val3;
-
-			pop(&stack, &val1);
-			pop(&stack, &val2);
-
-			doArithmeticOperation(val1, val2, currentToken.tok, &val3);
-			push(val3, &stack);
-		} */
-	}
-
-  /* Begruessungstext	
-	lcdPrintlnS("Hallo liebes TI-Labor (c-project)");
-	
-	 Test in Endlosschleife
-	while(1) {
-		HAL_Delay(10000);
-	} */
+	}	
 }
+
+
+
+int handleToken()
+{
+
+	return 0;
+}
+
 
 // EOF
