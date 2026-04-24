@@ -31,11 +31,11 @@ void printErrorMessage(int fehlercode)
 }
 
 
-void handleError(int fehlercode);
+void handleError(int fehlercode)
 {
-    bool ErrorHandled;
-
-    printErrorMessage(int fehlercode); //einmal vor der Loop
+    bool ErrorHandled = false;
+    
+    printErrorMessage(fehlercode); //einmal vor der Loop
 
 
     while(!ErrorHandled)

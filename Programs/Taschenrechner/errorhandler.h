@@ -3,3 +3,4 @@
 #define MATH_FAIL -1
 #define OTHER_OPERATIONFAIL -2
 #define ZERODIFF -4
+#define SWP_ERROR -3

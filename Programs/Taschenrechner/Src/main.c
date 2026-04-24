@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include "stack.h"
 #include "operation.h"
-
+#include "errorhandler.h"
 // To-Do:
 // Tokens müssen nicht großartig behandelt werden, nur verarbeitet. Mit stdio print die fehlercodes, immer call by reference, alles 
 // müsste ein int return haben um fehler codes zu haben, method für errorhandling, operationen hardcoden.
@@ -32,7 +32,6 @@ void convertAndPrint(int number)
 	char print[12];
 	intToString(number, print);
 	printStdout(print);
-	printStdout("\n");
 }
 
 // 
@@ -47,13 +46,13 @@ int main(void) {
 	while(1)
 	{
 		T_token currentToken = nextToken();
-		int number, val1, val2, val3, status;
+		int val1, val2, val3, status;
 
 		switch (currentToken.tok)
 		{
 			case NUMBER:
 				status = push(currentToken.val, &stack);
-				convertAndPrint(currentToken.val);
+				// convertAndPrint(currentToken.val);
 				break;
 			case PLUS: case MINUS: case MULT: case DIV:
 				pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
@@ -68,16 +67,35 @@ int main(void) {
 				break;
 
 			case PRT:
-				int print;
-				peek(&stack, &print);
-				convertAndPrint(print);
+				if(stack.sp == 0)
+				{
+					status = STACK_UNDERFLOW;
+					break;
+				}
+				else 
+				{
+				peek(&stack, &val1);
+				convertAndPrint(val1);
+				}
 
-				
+			case SWAP:
+				if(stack.sp < 2)
+				{
+					status = SWP_ERROR;
+					break;
+				}
+				else 
+				{
+					pop(&stack, &val1);
+					pop(&stack, &val2);
+					push(val2, &stack);
+					push(val1, &stack);
+					break;
+				}
 
 		}
 	}	
 }
-
 
 
 int handleToken()
