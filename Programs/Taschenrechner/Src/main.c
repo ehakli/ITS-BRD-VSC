@@ -32,6 +32,7 @@ void convertAndPrint(int number)
 	char print[12];
 	intToString(number, print);
 	printStdout(print);
+	printStdout("\n");
 }
 
 // 
