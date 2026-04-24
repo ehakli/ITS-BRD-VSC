@@ -1,3 +1,7 @@
+#ifndef OPERATION_H
+#define OPERATION_H
+
+
 #include "token.h"
 #include <stdlib.h>
 #include "stack.h"
@@ -24,3 +28,5 @@ int duplicate(Stack *stack);
 int swap(Stack *stack);
 
 void convertAndPrint(int number);
+
+#endif /* OPERATION_H */

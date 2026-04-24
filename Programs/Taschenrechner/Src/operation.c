@@ -83,7 +83,7 @@ int printtop(Stack *stack)
 		convertAndPrint(val1);
 	}
 
-    return 0;
+    return SUCCESS;
 }
 
 int print_all(Stack *stack)
