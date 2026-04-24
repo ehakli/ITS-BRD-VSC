@@ -33,10 +33,6 @@ int main(void) {
 
 	initITSboard();    // Initialisierung des ITS Boards
 	initDisplay();
-
-	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
-	TP_Init(false);                 // Initialisierung des LCD Boards mit Touch
-
 	makeKeyPad();
 
 	Stack stack;
@@ -44,12 +40,16 @@ int main(void) {
 	while(1)
 	{
 		T_token currentToken = nextToken();
-		int val1, val2, val3, status;
+		int number, val1, val2, val3, status;
 
 		switch (currentToken.tok)
 		{
 			case NUMBER:
 				status = push(currentToken.val, &stack);
+				char print[12];
+				intToString(currentToken.val, print);
+				printStdout(print);
+
 				break;
 
 
@@ -60,8 +60,9 @@ int main(void) {
 				pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
 				pop(&stack, &val2);
 
-				doArithmeticOperation(val1, val2, currentToken.tok, &val3);
+				status = doArithmeticOperation(val1, val2, currentToken.tok, &val3);
 				push(val3, &stack); 
+				break;
 
 			case CLEAR:
 				break;
