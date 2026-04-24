@@ -31,19 +31,12 @@ void printErrorMessage(int status)
 }
 
 
-<<<<<<< HEAD
 void handleError(int status)
 {
     bool ErrorHandled = false;
-
+    clearStdout();
+    setErrMode();
     printErrorMessage(status); //einmal vor der Loop
-=======
-void handleError(int fehlercode)
-{
-    bool ErrorHandled = false;
-    
-    printErrorMessage(fehlercode); //einmal vor der Loop
->>>>>>> 3ef46571b84e6a11c82db751a333588c8f83e03b
 
 
     while(!ErrorHandled)
