@@ -88,11 +88,11 @@ int main(void) {
 				{
 					pop(&stack, &val1);
 					pop(&stack, &val2);
-					push(val2, &stack);
+					
 					push(val1, &stack);
-					break;
+					push(val2, &stack);
 				}
-
+				break;
 		}
 	}	
 }
