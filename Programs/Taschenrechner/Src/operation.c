@@ -19,7 +19,11 @@ int doArithmeticOperation(int val1, int val2, char operator, int* target)
     *target = val1 * val2;
 
     case DIV:
-    *target = val2 / val2;
+    if(val1 =0 || val2 = 0)
+    {
+        return -4
+    }
+    *target = val2 / val1;
 
     default:
     return -1;
@@ -45,9 +49,9 @@ int doStackOperation (Stack *stack, char operator)
         
         default:
 
-        return 0;
+        return -2;
     }
-
+    return 0;
 }
 
 int reverseString(char *str)

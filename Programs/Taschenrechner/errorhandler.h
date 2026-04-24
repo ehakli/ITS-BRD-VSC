@@ -1,0 +1,5 @@
+#define STACK_OVERLOW -99
+#define STACK_UNDERFLOW -9
+#define MATH_FAIL -1
+#define OTHER_OPERATIONFAIL -2
+#define ZERODIFF -4
