@@ -5,9 +5,9 @@
 
 
 
-void printErrorMessage(int fehlercode)
+void printErrorMessage(int status)
 {
-    switch(fehlercode)
+    switch(status)
     {
     case -1:
     printStdout("Error MATH_FAIL: Mathematischen-Fehler!");
@@ -31,11 +31,11 @@ void printErrorMessage(int fehlercode)
 }
 
 
-void handleError(int fehlercode);
+void handleError(int status)
 {
-    bool ErrorHandled;
+    bool ErrorHandled = false;
 
-    printErrorMessage(int fehlercode); //einmal vor der Loop
+    printErrorMessage(status); //einmal vor der Loop
 
 
     while(!ErrorHandled)
