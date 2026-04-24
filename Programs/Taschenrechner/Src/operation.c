@@ -19,9 +19,9 @@ int doArithmeticOperation(int val1, int val2, char operator, int* target)
     *target = val1 * val2;
 
     case DIV:
-    if(val1 =0 || val2 = 0)
+    if(val1 == 0 || val2 == 0)
     {
-        return -4
+        return -4;
     }
     *target = val2 / val1;
 

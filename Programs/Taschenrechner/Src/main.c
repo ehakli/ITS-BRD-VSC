@@ -49,6 +49,7 @@ int main(void) {
 				char print[12];
 				intToString(currentToken.val, print);
 				printStdout(print);
+				printStdout("\n");
 
 				break;
 
