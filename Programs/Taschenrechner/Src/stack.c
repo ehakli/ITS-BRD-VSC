@@ -1,3 +1,4 @@
+#include "errorhandler.h"
 #include "token.h"
 #include <stdbool.h>
 #include <stdint.h>
@@ -5,10 +6,6 @@
 
 
 
-void initStack(Stack *stack)
-{
-    stack->sp = 0;
-}
 
 bool isFull(Stack *stack)
 {
@@ -26,9 +23,9 @@ int push(int value, Stack *stack)
     {
         stack->arr[stack->sp] = value;
         stack->sp++;
-        return 0;
+        return SUCCESS;
     }
-    else return -1;
+    else return STACK_OVERFLOW;
 }
 
 int pop(Stack *stack, int *target)
@@ -37,9 +34,9 @@ int pop(Stack *stack, int *target)
     {
         *target = stack->arr[stack->sp - 1];
         stack->sp--;
-        return 0;
+        return SUCCESS;
     }
-    else return 1;
+    else return STACK_UNDERFLOW;
 }
 
 int peek(Stack *stack,int *top)
@@ -47,11 +44,11 @@ int peek(Stack *stack,int *top)
     if(stack->sp > 0)
     {
          *top = stack->arr[stack->sp - 1];
-        return 0;
+        return SUCCESS;
     }
     else 
     {
-        return 1;
+        return STACK_UNDERFLOW;
     }
 }
 

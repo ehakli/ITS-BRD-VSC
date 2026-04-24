@@ -18,7 +18,7 @@ int add(Stack *stack)
     
     push(val1 + val2, stack);
 
-    return 0;
+    return SUCCESS;
 
 }
 
@@ -34,7 +34,7 @@ int sub(Stack *stack)
     
     push(val1 - val2, stack);
 
-    return 0;
+    return SUCCESS;
 }
 
 int mul(Stack *stack)
@@ -49,7 +49,7 @@ int mul(Stack *stack)
     
     push(val1 * val2, stack);
 
-    return 0;
+    return SUCCESS;
 }
 
 int divi(Stack *stack)
@@ -64,7 +64,7 @@ int divi(Stack *stack)
     
     push(val2 / val1, stack);
 
-    return 0;
+    return SUCCESS;
 }
 
 int printtop(Stack *stack)
@@ -73,7 +73,6 @@ int printtop(Stack *stack)
 	{
 		return STACK_UNDERFLOW;
 	}
-
 	else 
 	{
         int val1;
@@ -111,7 +110,7 @@ int duplicate(Stack *stack)
     status = push(val1, stack);
     if(status != SUCCESS) return status;
 
-    return 0;
+    return SUCCESS;
 }
 
 int swap(Stack *stack)
@@ -131,7 +130,7 @@ int swap(Stack *stack)
 		push(val2, stack);
 	}
 
-    return 0;
+    return SUCCESS;
 }
 
 
@@ -154,7 +153,7 @@ int reverseString(char *str)
         tail--;
     }
 
-    return 0;
+    return SUCCESS;
 }
 
 int intToString(int num, char *str)
@@ -192,6 +191,8 @@ int intToString(int num, char *str)
     {
         str[i++] = '-';
     }
+
+    str[i] = '\0';
 
     reverseString(str);
 

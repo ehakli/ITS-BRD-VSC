@@ -42,7 +42,9 @@ int main(void) {
 	while(1)
 	{
 		T_token currentToken = nextToken();
-		int val1, val2, val3, status;
+		clearStdout();
+		
+		int status = 0;
 
 		switch (currentToken.tok)
 		{
@@ -88,16 +90,14 @@ int main(void) {
 				break;
 
 		}
-
+		if (status != SUCCESS)
+		{
+			handleError(status);
+		}
 	}	
 }
 
 
-int handleToken()
-{
-
-	return 0;
-}
 
 
 // EOF
