@@ -23,16 +23,12 @@
 #include "stack.h"
 #include "operation.h"
 #include "errorhandler.h"
+
 // To-Do:
 // Tokens müssen nicht großartig behandelt werden, nur verarbeitet. Mit stdio print die fehlercodes, immer call by reference, alles 
 // müsste ein int return haben um fehler codes zu haben, method für errorhandling, operationen hardcoden.
 
-void convertAndPrint(int number)
-{
-	char print[12];
-	intToString(number, print);
-	printStdout(print);
-}
+
 
 // 
 int main(void) {
@@ -71,46 +67,28 @@ int main(void) {
 				break;
 
 
-				//pop(&stack, &val1); // in eine methode zusammenfassen, dann den status direkt bei error returnen
-				//pop(&stack, &val2);
-
-				//status = doArithmeticOperation(val1, val2, currentToken.tok, &val3);
-				//push(val3, &stack); 
-				//break;
-
 			case CLEAR:
 				stack.sp = 0;
 				break;
 
 			case PRT:
-				if(stack.sp == 0)
-				{
-					status = STACK_UNDERFLOW;
-				}
-
-				else 
-				{
-				peek(&stack, &val1);
-				convertAndPrint(val1);
-				}
+				status = printtop(&stack);
 				break;
 
 			case SWAP:
-				if(stack.sp < 2)
-				{
-					status = SWP_ERROR;
-					break;
-				}
-				else 
-				{
-					pop(&stack, &val1);
-					pop(&stack, &val2);
-					
-					push(val1, &stack);
-					push(val2, &stack);
-				}
+				status = swap(&stack);
 				break;
+
+			case DOUBLE:
+				status = duplicate(&stack);
+				break;
+
+			case PRT_ALL:
+				status = print_all(&stack);
+				break;
+
 		}
+
 	}	
 }
 

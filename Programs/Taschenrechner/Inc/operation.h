@@ -3,10 +3,6 @@
 #include "stack.h"
 #include <stdbool.h>
 
-int doArithmeticOperation(int val1, int val2, char operator, int * target);
-
-int doStackOperation (Stack *stack, char operator);
-
 int reverseString(char *str);
 
 int intToString(int num, char *str);
@@ -18,3 +14,13 @@ int sub(Stack *stack);
 int mul(Stack *stack);
 
 int divi(Stack *stack);
+
+int printtop(Stack *stack);
+
+int print_all(Stack *stack);
+
+int duplicate(Stack *stack);
+
+int swap(Stack *stack);
+
+void convertAndPrint(int number);

@@ -3,24 +3,20 @@
 #include "stack.h"
 #include <stdbool.h>
 #include "errorhandler.h"
-
+#include "display.h"
+#include "operation.h"
 
 int add(Stack *stack)
 {
     int val1, val2;
 
     int status = pop(stack, &val1);
-
     if(status != SUCCESS) return status; 
 
 	status = pop(stack, &val2);
-
-    if(status != 0) return status; 
+    if(status != SUCCESS) return status; 
     
-
-    int val3 = val1 + val2;
-    
-    push(val3, stack);
+    push(val1 + val2, stack);
 
     return 0;
 
@@ -28,88 +24,117 @@ int add(Stack *stack)
 
 int sub(Stack *stack)
 {
-    pop(stack, &val1);
-    pop(stack, &val2);
+     int val1, val2;
 
-    val3 = val1 - val2;
-    push(val3, stack);
+    int status = pop(stack, &val1);
+    if(status != SUCCESS) return status; 
+
+	status = pop(stack, &val2);
+    if(status != SUCCESS) return status; 
+    
+    push(val1 - val2, stack);
 
     return 0;
 }
 
 int mul(Stack *stack)
 {
-    pop(stack, &val1);
-    pop(stack, &val2);
+    int val1, val2;
 
-    val3 = val1 * val2;
-    push(val3, stack);
+    int status = pop(stack, &val1);
+    if(status != SUCCESS) return status; 
+
+	status = pop(stack, &val2);
+    if(status != SUCCESS) return status; 
+    
+    push(val1 * val2, stack);
 
     return 0;
 }
 
 int divi(Stack *stack)
 {
-    pop(stack, &val1);
-    pop(stack, &val2);
+    int val1, val2;
 
-    val3 = val2 / val1;
-    push(val3, stack);
+    int status = pop(stack, &val1);
+    if(status != SUCCESS) return status; 
+
+	status = pop(stack, &val2);
+    if(status != SUCCESS) return status; 
+    
+    push(val2 / val1, stack);
 
     return 0;
 }
 
-
-int doArithmeticOperation(int val1, int val2, char operator, int* target) 
+int printtop(Stack *stack)
 {
-    switch (operator) 
-    {
-    case PLUS:
-    *target = val1 + val2;
-    break;
+    if(stack->sp == 0)
+	{
+		return STACK_UNDERFLOW;
+	}
 
-    case MINUS:
-    *target = val1 - val2;
-    break;
+	else 
+	{
+        int val1;
+		int status = peek(stack, &val1);
+        if(status != SUCCESS) return status;
 
-    case MULT:
-    *target = val1 * val2;
-
-    case DIV:
-    if(val1 == 0 || val2 == 0)
-    {
-        return -4;
-    }
-    *target = val2 / val1;
-
-    default:
-    return -1;
-    }   
+		convertAndPrint(val1);
+	}
 
     return 0;
 }
 
-int doStackOperation (Stack *stack, char operator)
+int print_all(Stack *stack)
 {
-
-    switch(operator)
+    if(stack->sp < 1)
     {
-        case PRT:
-
-        case PRT_ALL:
-
-        case CLEAR:
-
-        case DOUBLE:
-
-        case SWAP: 
-        
-        default:
-
-        return -2;
+        return STACK_UNDERFLOW;
     }
+
+    for(int i = 0; i < stack->sp; i++)
+    {
+        int num = stack->arr[i];
+        convertAndPrint(num);
+    }
+
+    return SUCCESS;
+}
+
+int duplicate(Stack *stack)
+{
+    int val1;
+    int status = peek(stack, &val1);
+    if(status != SUCCESS) return status;
+
+    status = push(val1, stack);
+    if(status != SUCCESS) return status;
+
     return 0;
 }
+
+int swap(Stack *stack)
+{
+    int val1, val2;
+
+    if(stack->sp < 2)
+	{
+		return SWP_ERROR;	
+	}
+	else 
+	{
+		pop(stack, &val1);
+		pop(stack, &val2);
+					
+		push(val1, stack);
+		push(val2, stack);
+	}
+
+    return 0;
+}
+
+
 
 int reverseString(char *str)
 {
@@ -171,4 +196,12 @@ int intToString(int num, char *str)
     reverseString(str);
 
     return 0;
+}
+
+void convertAndPrint(int number)
+{
+	char print[12];
+	intToString(number, print);
+	printStdout(print);
+    printStdout("\n");
 }
