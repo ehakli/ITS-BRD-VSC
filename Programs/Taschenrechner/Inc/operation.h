@@ -1,6 +1,8 @@
 #ifndef OPERATION_H
 #define OPERATION_H
 
+#define INT_MAXVALUE 2147483647
+#define INT_MINVALUE -2147483648
 
 #include "token.h"
 #include <stdlib.h>

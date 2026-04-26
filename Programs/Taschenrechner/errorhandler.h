@@ -9,6 +9,8 @@
 #define NULL_DIV -4
 #define SWP_ERROR -3
 #define SUCCESS 0
+#define ARITHMETIC_OVERFLOW -5
+#define ARITHMETIC_UNDERFLOW -6
 
 void handleError(int status);
 

@@ -6,6 +6,7 @@
 #include "display.h"
 #include "operation.h"
 
+
 int add(Stack *stack)
 {
     int val1, val2;
@@ -15,10 +16,20 @@ int add(Stack *stack)
 
 	status = pop(stack, &val2);
     if(status != SUCCESS) return status; 
-    
-    push(val1 + val2, stack);
 
-    return SUCCESS;
+    if(val1 > INT_MAXVALUE - val2) // overflow
+    {
+        return ARITHMETIC_OVERFLOW;
+    }
+    else if(val1 < INT_MINVALUE - val2) // underflow
+    {
+        return ARITHMETIC_UNDERFLOW;
+    }
+    else 
+    {
+        push(val1 + val2, stack);
+        return SUCCESS;
+    }
 
 }
 
@@ -31,11 +42,19 @@ int sub(Stack *stack)
 
 	status = pop(stack, &val2);
     if(status != SUCCESS) return status; 
-    
-    push(val1 - val2, stack);
 
-    return SUCCESS;
-}
+    if (val1 > 0) 
+    {
+        if (val2 < INT_MINVALUE + val1) return ARITHMETIC_OVERFLOW;
+    }
+    else if (val1 < 0)
+    {
+        if (val2 > INT_MAXVALUE + val1) return ARITHMETIC_OVERFLOW;
+    }
+
+        push(val2 - val1, stack);
+        return SUCCESS;
+        }
 
 int mul(Stack *stack)
 {
@@ -46,9 +65,34 @@ int mul(Stack *stack)
 
 	status = pop(stack, &val2);
     if(status != SUCCESS) return status; 
-    
-    push(val1 * val2, stack);
 
+    if(val1 != 0 && val2 != 0)
+    {
+        if(val1 > 0)
+        {
+            if(val2 > 0)
+            {
+                if(val1 > INT_MAXVALUE / val2) return ARITHMETIC_OVERFLOW;
+            } 
+            else 
+            {
+                if(val2 < INT_MINVALUE / val1) return ARITHMETIC_OVERFLOW;
+            }
+        }
+        else 
+        {
+            if(val2 > 0)
+            {
+                if(val1 < INT_MINVALUE / val2) return ARITHMETIC_OVERFLOW;
+            }
+            else 
+            {
+                if(val1 < INT_MAXVALUE / val2) return ARITHMETIC_OVERFLOW;
+            }
+        }
+    }
+
+    push(val1 * val2, stack);
     return SUCCESS;
 }
 
