@@ -5,8 +5,6 @@
 #include "stack.h"
 
 
-
-
 bool isFull(Stack *stack)
 {
     return stack->sp == STACK_SIZE;

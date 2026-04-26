@@ -1,0 +1,13 @@
+Randfehler und Testcases:
+
+1. 10, 0, / (Division by Zero)
+2. Random Operator (Stack Underflow)
+3. Stack befüllen +1 (Stack Overflow)
+4. 2147483647, 1, + (Arithmetic Overflow)
+5. 0, 2000000000, -, 0, 2000000000, -, (Arithmetic Underflow)
+6. 100000, 30000, * (Arithmetic Overflow)
+7. 0, 100000, -, 300000, * (Arithmetic Underflow)
+8. 0, 50000, -, 0, 50000, -, * (Zwei Negative)
+9. -1, 2147483647, * (passt gerade noch so)
+10. 0, 2147483647, -, 10, - (Underflow)
+11. 10, 0, 2147483647, -, - (Overflow)  
