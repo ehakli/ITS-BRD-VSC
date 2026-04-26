@@ -107,11 +107,16 @@ int divi(Stack *stack)
     if(status != SUCCESS) return status; 
     
     if(val1 == 0 || val2 == 0)
-    {
+    {   
         return NULL_DIV;
     }
-    push(val2 / val1, stack);
 
+    if(val2 == INT_MINVALUE && val1 == -1)
+    {
+        return ARITHMETIC_OVERFLOW;
+    }
+
+    push(val2 / val1, stack);
     return SUCCESS;
 }
 
