@@ -62,6 +62,10 @@ int divi(Stack *stack)
 	status = pop(stack, &val2);
     if(status != SUCCESS) return status; 
     
+    if(val1 == 0 || val2 == 0)
+    {
+        return NULL_DIV;
+    }
     push(val2 / val1, stack);
 
     return SUCCESS;

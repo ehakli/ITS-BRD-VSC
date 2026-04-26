@@ -6,7 +6,7 @@
 #define STACK_UNDERFLOW -9
 #define MATH_FAIL -1
 #define OTHER_OPERATIONFAIL -2
-#define ZERODIFF -4
+#define NULL_DIV -4
 #define SWP_ERROR -3
 #define SUCCESS 0
 
