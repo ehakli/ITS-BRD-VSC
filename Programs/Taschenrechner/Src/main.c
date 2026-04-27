@@ -16,9 +16,10 @@
 #include "operation.h"
 #include "errorhandler.h"
 
-int main(void) {
+int main(void) 
+{
 
-	initITSboard();    // Initialisierung des ITS Boards
+	initITSboard();    
 	initDisplay();
 	makeKeyPad();
 
@@ -52,7 +53,6 @@ int main(void) {
 			case DIV:
 				status = divi(&stack);
 				break;
-
 
 			case CLEAR:
 				stack.sp = 0;

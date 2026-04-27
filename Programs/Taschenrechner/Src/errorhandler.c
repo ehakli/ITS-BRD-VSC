@@ -25,7 +25,7 @@ void printErrorMessage(int status)
     case -99:
         printStdout("Error STACK_OVERFLOW: Zu viele Zahlen\0");
         break;
-    case -5:
+    case ARITHMETIC_OVERFLOW:
         printStdout("Error ARITHMETIC_OVERFLOW: Bereichsueberschreitung!");
         break;
     case -6:
