@@ -29,6 +29,12 @@ int main(void) {
 	// Test in Endlosschleife
 	while(1) {
 		HAL_Delay(10000);
+		// signal lesen (gpios)
+		// FSM updaten
+		//alle 250-500ms dann WinkelGeschwindigkeit berechnen
+		//leds passend setzen
+		// wenn veränderung Display aktuallisieren
+		// schauen ob fehler (S6) und wenn ja löschen
 	}
 }
 
