@@ -16,7 +16,13 @@
 #include "additionalFonts.h"
 #include "error.h"
 
-
+/*Module : 
+timer.c (Zeitlesen und zeitspanne ausrechnen)
+FSM.c (Phasenerkeunng, zähler und fehlerstate)
+winkel.c (Winkel und Winkelgeschwindigkeit)
+gpio.c (signal einlesen und leuchten ansteuern)
+display.c (display ausgabe)
+main.c (superloop)*/
 int main(void) {
 	initITSboard();    // Initialisierung des ITS Boards
 	
