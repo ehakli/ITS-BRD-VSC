@@ -79,11 +79,11 @@ char fsm_get_richtung(void)
 {
     return drehrichtung;
 }
-void fsm_reset_fehler()
+void fsm_reset_fehler(void)
 {
     fehler = 0;
 }
-void fsm_reset_zaehler()
+void fsm_reset_zaehler(void)
 {
     phasen_zaehler = 0; drehrichtung = '?';
 }
