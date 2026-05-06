@@ -1,0 +1,7 @@
+{
+    "debug.hideSlowPreLaunchWarning": true,
+    "debug.showInStatusBar": "never",
+    "clangd.arguments": [
+        "--compile-commands-dir=/Users/ehakli/ITS-BRD-VSC/Programs/Drehgeber/out/Drehgeber/ITSboard/Debug"
+    ]
+}
