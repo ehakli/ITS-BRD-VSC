@@ -6,24 +6,20 @@
 #include "gpio.h"
 #include "stm32f4xx_hal.h"
 
-void setLED(int pos)
-{
-
-}
 
 void setForwardLED() // d23
 {
-    GPIOD->BSRR = (0x1 << FORWARD_LED_POS);
+    GPIOE->BSRR = (BSRR_MASK_PIN_7);
 }
 
 void setBackwardLED() // d22
 {
-    GPIOD->BSRR = (0x1 << BACKWARD_LED_POS);
+    GPIOE->BSRR = (BSRR_MASK_PIN_6);
 }
 
 void setErrorLED() // d21
 {
-    GPIOD->BSRR = (0x1 << ERROR_LED_POS);
+    GPIOE->BSRR = (BSRR_MASK_PIN_5);
 }
 
 void toggleSignal() // für oszi
@@ -33,9 +29,9 @@ void toggleSignal() // für oszi
 
 uint32_t counter;
 
-void setStepLEDs()
+void setStepLEDs(uint32_t counter)
 {
-
+    GPIOD->BSRR = counter;
 }
 
 bool isErrorButtonPressed() // s5
@@ -43,3 +39,8 @@ bool isErrorButtonPressed() // s5
     return !(GPIOF->IDR & IDR_MASK_PIN_5);
 }
 
+Phase readCurrentPhase()
+{
+    // GPIOF->MODER &= ~((0x03U << (2*0)) | (0x03U << (2*1)));
+    return GPIOF->IDR & 0x03U;
+}

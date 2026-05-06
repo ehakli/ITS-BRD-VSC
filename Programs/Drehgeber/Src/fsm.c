@@ -1,20 +1,20 @@
-static char letzte_phase = b; /*Start*/
+static char letzte_phase = 'b'; /*Start*/
 static int phasen_zaehler = 0;
 static int fehler = 0;
-static char drehrichtung = ?; /*indikator für die richtung startet bei keinem*/
+static char drehrichtung = '?'; /*indikator für die richtung startet bei keinem*/
 
 char fsm_gib_phase(char a, char b) 
 {
     if(a == 0 && b == 0) return a;
     if(a == 1 && b == 0) return b;
-    if(a == 1 && b == 1) return c;
-    if(a == 0 && b == 1) return d;
+    if(a == 1 && b == 1) return 'c';
+    if(a == 0 && b == 1) return 'd';
     return '?'; /*optimal nie*/
 }
 
 void fsm_update(int kanal_a, int kanal_b)
 {
-    char neue_phase = fsm_get_phase(kanal_a, kanal_b);
+    char neue_phase = fsm_gib_phase(kanal_a, kanal_b);
     if(letzte_phase == neue_phase)
     {
         /*Keine veränderung*/
@@ -32,7 +32,7 @@ void fsm_update(int kanal_a, int kanal_b)
     else if(letzte_phase == 'c' && neue_phase == 'd')
     {
         phasen_zaehler++;
-        drehrichtung = 'v'
+        drehrichtung = 'v'; 
     }
     else if(letzte_phase == 'd' && neue_phase == 'a')
     {

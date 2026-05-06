@@ -3,21 +3,37 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-#define FORWARD_LED_POS 16
-#define BACKWARD_LED_POS 15
-#define ERROR_LED_POS 14
 #define IDR_MASK_PIN_5 (0x01U << 5)
 
+#define MODER_MASK_PIN_7 (0x03U << (2*7))
+#define MODER_MASK_PIN_6 (0x03U << (2*6))
+#define MODER_MASK_PIN_5 (0x03U << (2*5))
+
+#define BSRR_MASK_PIN_7 (0x01U << 7)
+#define BSRR_MASK_PIN_6 (0x01U << 6)
+#define BSRR_MASK_PIN_5 (0x01U << 5)
+
+#define MODER_OUT_PIN_7 (0x01U << (2*7))
+#define MODER_OUT_PIN_6 (0x01U << (2*6))
+#define MODER_OUT_PIN_5 (0x01U << (2*5))
+
+#define BSRR_RESET_SHIFT 16
+
+#define MODER_MASK_PIND 0x0000FFFFU // nur d8-d15
+#define MODER_OUT_PIND 0x00005555U // 8*01 in Hex
 
 typedef enum {
-    PhaseA = 0,
-    PhaseB = 2,
-    PhaseC = 3,
-    PhaseD = 1
+    PhaseA = 0x0,
+    PhaseB = 0x2,
+    PhaseC = 0x3,
+    PhaseD = 0x1
 } Phase;
 
 void setForwardLED();
+void setBackwardLED();
+void setErrorLED();
+void setStepLEDs();
 bool isErrorButtonPressed();
-
+Phase readCurrentPhase();
 #endif /* GPIO_H */
 // EOF

@@ -183,6 +183,7 @@ project:
       files:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
         - file: gpio.h
+        - file: angle.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src

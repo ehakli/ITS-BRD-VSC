@@ -16,8 +16,10 @@
 #include "additionalFonts.h"
 #include "error.h"
 #include "lcd.h"
+#include <stdint.h>
 #include <stdio.h>
 #include "gpio.h"
+#include "timer.h"
 /*Module : 
 timer.c (Zeitlesen und zeitspanne ausrechnen)
 FSM.c (Phasenerkeunng, zähler und fehlerstate)
@@ -26,25 +28,33 @@ gpio.c (signal einlesen und leuchten ansteuern)
 display.c (display ausgabe)
 main.c (superloop)*/
 // In discord server bit shifting gemacht
+
+void initIOMODER(void)
+{
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7;
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6; 
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;  
+
+  GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND;
+
+}
 int main(void) {
     initITSboard();    // Initialisierung des ITS Boards
     GUI_init(DEFAULT_BRIGHTNESS);
     TP_Init(false);
-    GPIOE->BSRR; // 
-    GPIOD->BSRR; // BSRR Ersten 0-7 bits = Schreiben, die 15-23 sind ausmachen
-    GPIOF->IDR; // ersten Zwei Stellen: Input vom Drehregler
-    GPIOF->MODER &= ~((0x03U << (2*0)) | (0x03U << (2*1)));
-    
-  // Begruessungstext   
-    
-    // Test in Endlosschleife
+
+    initTimer();
+    initIOMODER();
+    setStepLEDs(200);
+    initTimer();
+
     while(1) {
 
-		setForwardLED();
-		//lcdPrintInt(isErrorButtonPressed());
+        // uint8_t status = readCurrentPhase();
+        // lcdPrintInt(status);
         // signal lesen (gpios)
         // FSM updaten
-        //alle 250-500ms dann WinkelGeschwindigkeit berechnen
+        // alle 250-500ms dann WinkelGeschwindigkeit berechnen
         //leds passend setzen
         // wenn veränderung Display aktuallisieren
         // schauen ob fehler (S6) und wenn ja löschen
