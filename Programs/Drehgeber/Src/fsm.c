@@ -1,89 +1,99 @@
-static char letzte_phase = 'b'; /*Start*/
-static int phasen_zaehler = 0;
-static int fehler = 0;
-static char drehrichtung = 'i'; /*indikator für die richtung startet bei keinem*/
+typedef enum 
+ {
+    PHASE_A,
+    PHASE_B,
+    PHASE_C,
+    PHASE_D,
+    PHASE_UNKNOWN
+} Phase; 
 
-char fsm_gib_phase(char a, char b) 
+static char last_phase = PHASE_B; /*Start*/
+static int phasen_counter = 0;
+static int error = 0;
+static char direction  = 'i'; /*indikator für die richtung startet bei i = idle*/
+
+
+char fsm_get_phase(char a, char b) 
 {
-    if(a == 0 && b == 0) return a;
-    if(a == 1 && b == 0) return b;
-    if(a == 1 && b == 1) return 'c';
-    if(a == 0 && b == 1) return 'd';
-    return '?'; /*optimal nie*/
+    if(a == 0 && b == 0) return PHASE_A;
+    if(a == 1 && b == 0) return PHASE_B;
+    if(a == 1 && b == 1) return PHASE_C;
+    if(a == 0 && b == 1) return PHASE_D;
+    return PHASE_UNKNOWN; /*optimal nie*/
 }
 
-void fsm_update(int kanal_a, int kanal_b)
+void fsm_update(int channel_a, int channel_b)
 {
-    char neue_phase = fsm_gib_phase(kanal_a, kanal_b);
-    if(letzte_phase == neue_phase)
+    Phase new_phase = fsm_get_phase(channel_a, channel_b);
+    if(last_phase == new_phase)
     {
-        drehrichtung = 'i';
+        direction = 'i';
     }
-    else if(letzte_phase == 'a' && neue_phase == 'b')
+    else if(last_phase == PHASE_A && new_phase == PHASE_B)
     {
-        phasen_zaehler++;
-        drehrichtung = 'v';
+        phasen_counter++;
+        direction = 'f';
     }
-    else if(letzte_phase == 'b' && neue_phase == 'c')
+    else if(last_phase == PHASE_B && new_phase == PHASE_C)
     {
-        phasen_zaehler++;
-        drehrichtung = 'v';
+        phasen_counter++;
+        direction = 'f';
     }
-    else if(letzte_phase == 'c' && neue_phase == 'd')
+    else if(last_phase == PHASE_C && new_phase == PHASE_D)
     {
-        phasen_zaehler++;
-        drehrichtung = 'v'; 
+        phasen_counter++;
+        direction = 'f'; 
     }
-    else if(letzte_phase == 'd' && neue_phase == 'a')
+    else if(last_phase == PHASE_D && new_phase == PHASE_A)
     {
-        phasen_zaehler++;
-        drehrichtung = 'v';
+        phasen_counter++;
+        direction = 'f';
     }
-    else if(letzte_phase == 'b' && neue_phase == 'a')
+    else if(last_phase == PHASE_B && new_phase == PHASE_A)
     {
-        phasen_zaehler++;
-        drehrichtung = 'r';
+        phasen_counter++;
+        direction = 'b';
     }
-    else if(letzte_phase == 'a' && neue_phase == 'd')
+    else if(last_phase == PHASE_A && new_phase == PHASE_D)
     {
-        phasen_zaehler++;
-        drehrichtung = 'r';
+        phasen_counter++;
+        direction = 'b';
     }
-    else if(letzte_phase == 'd' && neue_phase =='c')
+    else if(last_phase == PHASE_D && new_phase == PHASE_C)
     {
-        phasen_zaehler++;
-        drehrichtung = 'r';
+        phasen_counter++;
+        direction = 'b';
     }
-    else if(letzte_phase == 'c' && neue_phase == 'b')
+    else if(last_phase == PHASE_C && new_phase == PHASE_B)
     {
-        phasen_zaehler++;
-        drehrichtung = 'r';
+        phasen_counter++;
+        direction = 'b';
     }
     else
     {
-        fehler = 1;
+        error = 1;
     }
 
-    letzte_phase = neue_phase;
+    last_phase = new_phase;
 }
 
-int fsm_get_zeahler(void)
+int fsm_get_counter(void)
 {
-    return phasen_zaehler;
+    return phasen_counter;
 }
-int fsm_hat_fehler(void)
+int fsm_has_error(void)
 {
-    return fehler;
+    return error;
 }
-char fsm_get_richtung(void)
+char fsm_get_direction(void)
 {
-    return drehrichtung;
+    return direction;
 }
-void fsm_reset_fehler(void)
+void fsm_reset_error(void)
 {
-    fehler = 0;
+    error = 0;
 }
-void fsm_reset_zaehler(void)
+void fsm_reset_counter(void)
 {
-    phasen_zaehler = 0; drehrichtung = 'i';
+    phasen_counter = 0; direction = 'i';
 }
