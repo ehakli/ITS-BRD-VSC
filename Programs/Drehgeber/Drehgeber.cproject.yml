@@ -184,6 +184,7 @@ project:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
         - file: gpio.h
         - file: angle.h
+        - file: Inc/display.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -193,6 +194,7 @@ project:
         - file: Src/timer.c
         - file: Src/gpio.c
         - file: Src/angle.c
+        - file: Src/display.c
 
   components:
     - component: ARM::CMSIS:CORE
