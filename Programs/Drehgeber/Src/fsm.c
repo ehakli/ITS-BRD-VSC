@@ -13,7 +13,7 @@ static int error = 0;
 static char direction  = 'i'; /*indikator für die richtung startet bei i = idle*/
 
 
-char fsm_get_phase(char a, char b) 
+char fsm_get_phase(char a, char b)  /*Gibt die Phase*/
 {
     if(a == 0 && b == 0) return PHASE_A;
     if(a == 1 && b == 0) return PHASE_B;
@@ -22,7 +22,7 @@ char fsm_get_phase(char a, char b)
     return PHASE_UNKNOWN; /*optimal nie*/
 }
 
-void fsm_update(int channel_a, int channel_b)
+void fsm_update(int channel_a, int channel_b) /*aktuallisiert die Phase*/
 {
     Phase new_phase = fsm_get_phase(channel_a, channel_b);
     if(last_phase == new_phase)
@@ -77,23 +77,23 @@ void fsm_update(int channel_a, int channel_b)
     last_phase = new_phase;
 }
 
-int fsm_get_counter(void)
+int fsm_get_counter(void) /*gibt die Anzahl der Phasenwechsel aus*/
 {
     return phasen_counter;
 }
-int fsm_has_error(void)
+int fsm_has_error(void) /*gibt fehlerstatus*/
 {
     return error;
 }
-char fsm_get_direction(void)
+char fsm_get_direction(void) /*gibt die aktuelle drehrichtung*/
 {
     return direction;
 }
-void fsm_reset_error(void)
+void fsm_reset_error(void) /*setzt den fehler wieder auf kein feheler*/
 {
     error = 0;
 }
-void fsm_reset_counter(void)
+void fsm_reset_counter(void) /*setzt den zähler zurück und setzt drehrichtung auf stillstehnd*/
 {
     phasen_counter = 0; direction = 'i';
 }
