@@ -185,6 +185,7 @@ project:
         - file: gpio.h
         - file: angle.h
         - file: Inc/display.h
+        - file: Inc/fsm.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src

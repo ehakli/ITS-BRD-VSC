@@ -1,11 +1,5 @@
-typedef enum 
- {
-    PHASE_A,
-    PHASE_B,
-    PHASE_C,
-    PHASE_D,
-    PHASE_UNKNOWN
-} Phase; 
+#include "gpio.h"
+#include "fsm.h"
 
 static char last_phase = PHASE_B; /*Start*/
 static int phasen_counter = 0;
@@ -13,18 +7,9 @@ static int error = 0;
 static char direction  = 'i'; /*indikator für die richtung startet bei i = idle*/
 
 
-char fsm_get_phase(char a, char b)  /*Gibt die Phase*/
+void fsm_update(Phase newphase) /*aktuallisiert die Phase*/
 {
-    if(a == 0 && b == 0) return PHASE_A;
-    if(a == 1 && b == 0) return PHASE_B;
-    if(a == 1 && b == 1) return PHASE_C;
-    if(a == 0 && b == 1) return PHASE_D;
-    return PHASE_UNKNOWN; /*optimal nie*/
-}
-
-void fsm_update(int channel_a, int channel_b) /*aktuallisiert die Phase*/
-{
-    Phase new_phase = fsm_get_phase(channel_a, channel_b);
+    Phase new_phase = newPhase;
     if(last_phase == new_phase)
     {
         direction = 'i';
