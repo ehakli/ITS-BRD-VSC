@@ -51,22 +51,22 @@ void fsm_update(int channel_a, int channel_b) /*aktuallisiert die Phase*/
     }
     else if(last_phase == PHASE_B && new_phase == PHASE_A)
     {
-        phasen_counter++;
+        phasen_counter--;
         direction = 'b';
     }
     else if(last_phase == PHASE_A && new_phase == PHASE_D)
     {
-        phasen_counter++;
+        phasen_counter--;
         direction = 'b';
     }
     else if(last_phase == PHASE_D && new_phase == PHASE_C)
     {
-        phasen_counter++;
+        phasen_counter--;
         direction = 'b';
     }
     else if(last_phase == PHASE_C && new_phase == PHASE_B)
     {
-        phasen_counter++;
+        phasen_counter--;
         direction = 'b';
     }
     else
