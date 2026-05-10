@@ -25,16 +25,16 @@ void display_update(double winkel, double Geschwindikeit) /* aktuallisiert den W
 
 void prepareLCDUpdate(double angle, double velocity)
 {
-    snprintf(bufferArr, sizeof(bufferArr), "a:%.1f v:%.1f", angle, velocity);
+    snprintf(bufferArr, sizeof(bufferArr), "a:%.3f v:%.3f", angle, velocity);
     bufferIndex = 0;
 }
 
 void processLCDUpdate(void)
 {
-    if bufferIndex > 0 && bufferArr[bufferIndex != '\0']
+    if(bufferIndex > 0 && bufferArr[bufferIndex != '\0'])
     {
-        lcdGotoXY(startX + bufferIndex, startY)
-        lcdprintC();
+        lcdGotoXY(STARTX + bufferIndex, STARTY);
+        lcdPrintC(bufferArr[bufferIndex]);
         bufferIndex++;
     }
     else bufferIndex = -1; // all done

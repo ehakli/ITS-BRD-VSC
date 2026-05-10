@@ -22,6 +22,7 @@
 #include "timer.h"
 #include "angle.h"
 #include "display.h"
+#include "fsm.h"
 /*Module : 
 timer.c (Zeitlesen und zeitspanne ausrechnen)
 FSM.c (Phasenerkeunng, zähler und fehlerstate)
@@ -37,8 +38,8 @@ static int oldPhaseCounter = 0;
 static int newPhaseCounter;
 static double currTime;
 static double lastTime;
-static Phase oldPhase;
-Phase newPhase;
+static Phase oldPhase = PHASE_B;
+static Phase newPhase;
 static double velocity;
 static double angle;
 
@@ -60,16 +61,15 @@ int main(void) {
 
     initTimer();
     initIOMODER();
-    setStepLEDs(200);
-    initTimer();
-    oldPhase = PhaseB;
 
     while(1) {
 		//phasen checken, oldphase newphase implementieren
-    
+    newPhase = readCurrentPhase();
 		currTime = getTimeStamp();
+
 		uint32_t deltaTime = currTime - lastTime;
-    fsm_update();
+
+    fsm_update(newPhase);
 
 		if(((deltaTime > 0,25) && (oldPhase != newPhase)) || (deltaTime > 0,5))
 		{

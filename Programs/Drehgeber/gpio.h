@@ -23,10 +23,10 @@
 #define MODER_OUT_PIND 0x00005555U // 8*01 in Hex
 
 typedef enum {
-    PhaseA = 0x0,
-    PhaseB = 0x2,
-    PhaseC = 0x3,
-    PhaseD = 0x1
+    PHASE_A = 0x0,
+    PHASE_B = 0x2,
+    PHASE_C = 0x3,
+    PHASE_D = 0x1
 } Phase;
 
 void setForwardLED();
