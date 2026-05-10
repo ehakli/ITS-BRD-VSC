@@ -82,3 +82,7 @@ void fsm_reset_counter(void) /*setzt den zähler zurück und setzt drehrichtung 
 {
     phasen_counter = 0; direction = 'i';
 }
+void fsm_reset(void)
+{
+    phasen_counter = 0; direction = 'i'; last_phase = PHASE_B; error = 0;
+}
