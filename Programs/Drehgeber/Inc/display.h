@@ -2,7 +2,7 @@
 #define DISPLAY_H
 
 
-#define ANGLEY 28
+#define ANGLEY 8
 #define ANGLEX 0
 #define VELOCITY_Y 1
 #define VELOCITYX 16
@@ -15,5 +15,6 @@ void prepareVelocityBuffer(double velocity);
 void prepareAngleBuffer(double Angle);
 
 void processLCDUpdate(void);
+void processLCDUpdate2(void);
 
 #endif

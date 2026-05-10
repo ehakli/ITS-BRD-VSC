@@ -60,6 +60,7 @@ int main(void) {
     TP_Init(false);
 
     initTimer();
+    lastTime = getTimeStamp();
     initIOMODER();
     display_init();
 
@@ -68,23 +69,26 @@ int main(void) {
     newPhase = readCurrentPhase();
 		currTime = getTimeStamp();
 
-    double deltaTime = (currTime - lastTime) / 90e6;
-
     fsm_update(newPhase);
+
+    double deltaTime = (currTime - lastTime) / 90e6;
 
 		if(((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5))
 		{
 			newPhaseCounter = fsm_get_counter();
+
 			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
-      angle = calculateAngle(stepCounter);
+      angle = calculateAngle(newPhaseCounter);
 
       prepareAngleBuffer(angle);
       prepareVelocityBuffer(velocity);
 
       oldPhaseCounter = newPhaseCounter;
       lastTime = currTime;
-      
 		}
+
+    oldPhase = newPhase;
+
 
     status = fsm_get_direction();
 
@@ -111,7 +115,6 @@ int main(void) {
         // wenn veränderung Display aktuallisieren
         // schauen ob fehler (S6) und wenn ja löschen
 
-		lastTime = currTime;
     }
 }
 

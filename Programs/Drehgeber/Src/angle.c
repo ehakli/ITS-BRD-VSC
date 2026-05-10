@@ -7,9 +7,10 @@ double calculateAngle(int steps)
 }
 
 
-double getVelocity(int phaseDiff, int deltaTime)
+double getVelocity(int phaseDiff, double deltaTime)
 {
-    deltaTime /= 90e6;
+    if(deltaTime <= 0) return 0.0;
 
-    return (phaseDiff * 0,3) / deltaTime;
+    
+    return (phaseDiff * 0.3) / deltaTime;
 }
