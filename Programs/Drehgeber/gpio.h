@@ -32,7 +32,7 @@ typedef enum {
 void setForwardLED();
 void setBackwardLED();
 void setErrorLED();
-void setStepLEDs();
+void setStepLEDs(int counter);
 bool isErrorButtonPressed();
 Phase readCurrentPhase();
 #endif /* GPIO_H */

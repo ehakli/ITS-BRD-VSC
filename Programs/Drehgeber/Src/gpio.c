@@ -27,9 +27,7 @@ void toggleSignal() // für oszi
 
 }
 
-uint32_t counter;
-
-void setStepLEDs(uint32_t counter)
+void setStepLEDs(int counter)
 {
     GPIOD->BSRR = counter;
 }

@@ -42,6 +42,7 @@ static Phase oldPhase = PHASE_B;
 static Phase newPhase;
 static double velocity;
 static double angle;
+static int status;
 
 
 void initIOMODER(void)
@@ -70,6 +71,7 @@ int main(void) {
 		uint32_t deltaTime = currTime - lastTime;
 
     fsm_update(newPhase);
+    status = fsm_get_direction();
 
 		if(((deltaTime > 0,25) && (oldPhase != newPhase)) || (deltaTime > 0,5))
 		{
@@ -77,15 +79,20 @@ int main(void) {
 			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
       angle = calculateAngle(stepCounter);
 			oldPhaseCounter = newPhaseCounter;
-
-
-      
-
       prepareLCDUpdate(angle, velocity);
       
 		}
 
+    switch(status)
+    {
+      case 'i': break;
+      case 'f': setForwardLED(); break;
+      case 'b': setBackwardLED(); break; 
+    }
+
+    setStepLEDs(newPhaseCounter);
     // wenn geprintet werden muss 
+    
     processLCDUpdate();
 		
 

@@ -9,7 +9,7 @@ static char direction  = 'i'; /*indikator für die richtung startet bei i = idle
 
 void fsm_update(Phase newphase) /*aktuallisiert die Phase*/
 {
-    Phase new_phase = newphase;
+    Phase new_phase = newphase; // 🐐
     if(last_phase == new_phase)
     {
         direction = 'i';
