@@ -20,9 +20,14 @@ void setErrorLED() // d21
     GPIOE->BSRR = (BSRR_MASK_PIN_5);
 }
 
-void toggleSignal() // für oszi
+void signalHigh() // für oszi
 {
-    GPIOE->ODR ^= (1U << SCOPE_PIN);
+    GPIOE->BSRR = (BSRR_MASK_PIN_1_HIGH);
+}
+
+void signalLow()
+{
+    GPIOE->BSRR = (BSRR_MASK_PIN_1_LOW);
 }
 
 void setStepLEDs(int8_t counter)

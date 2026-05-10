@@ -24,13 +24,13 @@ void processLCDUpdate(void)
 {
     if(bufferIndexAngle >= 0 && bufferArrAngle[bufferIndexAngle] != '\0')
     {
-        lcdGotoXY(ANGLEX + bufferIndexAngle, ANGLEY);
+        lcdGotoXY(ANGLEX + bufferIndexAngle, ANGLEY); //step for step, jede einzelne Zahl.
         lcdPrintC(bufferArrAngle[bufferIndexAngle]);
         bufferIndexAngle++;
     }
     else if(bufferIndexVelocity >= 0 && bufferArrVelocity[bufferIndexVelocity] != '\0')
     {
-        lcdGotoXY(VELOCITYX + bufferIndexVelocity, VELOCITY_Y);
+        lcdGotoXY(VELOCITYX + bufferIndexVelocity, VELOCITY_Y); 
         lcdPrintC(bufferArrVelocity[bufferIndexVelocity]);
         bufferIndexVelocity++;
     }

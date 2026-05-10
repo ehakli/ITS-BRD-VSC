@@ -53,7 +53,9 @@ void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6;
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;
 
-  GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND;
+  GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND; // button
+
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_1) | MODER_OUT_PIN_1; // togglerLED
 }
 
 int main(void) {
@@ -67,7 +69,6 @@ int main(void) {
 
   while (1) 
   {
-    toggleSignal();
     ///inputs holen
     newPhase = readCurrentPhase();
     currTime = getTimeStamp();
@@ -116,8 +117,9 @@ int main(void) {
     }
 
     setStepLEDs(newPhaseCounter);
+    signalHigh();
     processLCDUpdate(); 
-    toggleSignal();
+    signalLow();
   }
 }
 
