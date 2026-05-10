@@ -35,5 +35,6 @@ void setErrorLED();
 void setStepLEDs(int counter);
 bool isErrorButtonPressed();
 Phase readCurrentPhase();
+void clearDirectionLEDs(void);
 #endif /* GPIO_H */
 // EOF

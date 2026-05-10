@@ -42,3 +42,8 @@ Phase readCurrentPhase()
     // GPIOF->MODER &= ~((0x03U << (2*0)) | (0x03U << (2*1)));
     return GPIOF->IDR & 0x03U;
 }
+
+void clearDirectionLEDs(void) 
+{
+    GPIOE->BSRR = (BSRR_MASK_PIN_7 << 16) | (BSRR_MASK_PIN_6 << 16) | (BSRR_MASK_PIN_5 << 16);
+}

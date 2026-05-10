@@ -1,4 +1,3 @@
-
 #include "LCD_GUI.h"
 #include "LCD_Touch.h"
 #include "additionalFonts.h"
@@ -28,19 +27,22 @@ static int status;
 void handleError()
 {
   bool ErrorHandled = false;
+  clearDirectionLEDs();
   setErrorLED();
   
   while(!ErrorHandled)
   {
     if(isErrorButtonPressed())
     {
-       oldPhaseCounter = 0;
+
+      oldPhaseCounter = 0;
       newPhaseCounter = 0;
       currTime = 0;
       lastTime = 0;
       oldPhase = PHASE_B;
       velocity = 0;
       angle = 0;
+      fsm_reset();
       ErrorHandled = true;
     }
   }
@@ -98,14 +100,16 @@ int main(void) {
       case 'i':
         break;
       case 'f':
+        clearDirectionLEDs();
         setForwardLED();
         break;
       case 'b':
+        clearDirectionLEDs();
         setBackwardLED();
         break;
       }
     }
-    
+
     setStepLEDs(newPhaseCounter);
     processLCDUpdate();
   }
