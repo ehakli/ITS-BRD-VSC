@@ -21,6 +21,7 @@
 #include "gpio.h"
 #include "timer.h"
 #include "angle.h"
+#include "display.h"
 /*Module : 
 timer.c (Zeitlesen und zeitspanne ausrechnen)
 FSM.c (Phasenerkeunng, zähler und fehlerstate)
@@ -30,6 +31,7 @@ display.c (display ausgabe)
 main.c (superloop)*/
 // In discord server bit shifting gemacht
 
+static int stepCounter;
 static int phasediff;
 static int oldPhaseCounter = 0;
 static int newPhaseCounter;
@@ -37,6 +39,8 @@ static double currTime;
 static double lastTime;
 static Phase oldPhase;
 Phase newPhase;
+static double velocity;
+static double angle;
 
 
 void initIOMODER(void)
@@ -70,10 +74,19 @@ int main(void) {
 		if(((deltaTime > 0,25) && (oldPhase != newPhase)) || (deltaTime > 0,5))
 		{
 			newPhaseCounter = fsm_get_counter();
-			getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
+			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
+      angle = calculateAngle(stepCounter);
 			oldPhaseCounter = newPhaseCounter;
+
+
+      
+
+      prepareLCDUpdate(angle, velocity);
+      
 		}
 
+    // wenn geprintet werden muss 
+    processLCDUpdate();
 		
 
         // uint8_t status = readCurrentPhase();
