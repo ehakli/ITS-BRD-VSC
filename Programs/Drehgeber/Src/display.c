@@ -1,5 +1,10 @@
 #include "display.h"
 #include "lcd.h"
+#include <stdio.h>
+
+static char bufferArr[32];
+static int bufferIndex = -1;
+
 
 void display_init(void) /*schreibt den Standart text aufs Display der konstant so bleibt*/
 {
@@ -16,4 +21,21 @@ void display_update(double winkel, double Geschwindikeit) /* aktuallisiert den W
     lcdPrintInt((int)winkel);
     lcdGotoXY(0,90);
     lcdPrintInt((int)Geschwindikeit);
+}
+
+void prepareLCDUpdate(double angle, double velocity)
+{
+    snprintf(bufferArr, sizeof(bufferArr), "a:%.1f v:%.1f", angle, velocity);
+    bufferIndex = 0;
+}
+
+void processLCDUpdate(void)
+{
+    if bufferIndex > 0 && bufferArr[bufferIndex != '\0']
+    {
+        lcdGotoXY(startX + bufferIndex, startY)
+        lcdprintC();
+        bufferIndex++;
+    }
+    else bufferIndex = -1; // all done
 }

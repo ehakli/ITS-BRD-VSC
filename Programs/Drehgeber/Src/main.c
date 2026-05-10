@@ -48,6 +48,7 @@ void initIOMODER(void)
   GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND;
 
 }
+
 int main(void) {
     initITSboard();    // Initialisierung des ITS Boards
     GUI_init(DEFAULT_BRIGHTNESS);
@@ -57,11 +58,14 @@ int main(void) {
     initIOMODER();
     setStepLEDs(200);
     initTimer();
+    oldPhase = PhaseB;
 
     while(1) {
 		//phasen checken, oldphase newphase implementieren
+    
 		currTime = getTimeStamp();
 		uint32_t deltaTime = currTime - lastTime;
+    fsm_update();
 
 		if(((deltaTime > 0,25) && (oldPhase != newPhase)) || (deltaTime > 0,5))
 		{
@@ -70,6 +74,7 @@ int main(void) {
 			oldPhaseCounter = newPhaseCounter;
 		}
 
+		
 
         // uint8_t status = readCurrentPhase();
 		// phasediff berechnen (wenn nicht idle oder error)
@@ -95,7 +100,7 @@ wir erstellen einen buffer, der die zahlen als charArray speichert
 für prints: wir erstellen jedes mal wenn getvelocity gecalld wird, wird dieser buffer mit der neuen zahl überschrieben. wir starten bei einem iindex von 0 und geben nur einzelne
 ziffern aus anstatt ganze zahlen. nach dem ausgeben von einzelnen ziffern wird der index erhöht. basierend auf dem index können die print positionen auch gemacht werden
 dieses printen passiert außerhalb von unserem getVelocity block 
-
+´ß
 */
 
 
