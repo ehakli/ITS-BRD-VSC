@@ -33,7 +33,6 @@ main.c (superloop)*/
 // In discord server bit shifting gemacht
 
 static int stepCounter;
-static int phasediff;
 static int oldPhaseCounter = 0;
 static int newPhaseCounter;
 static double currTime;
@@ -62,26 +61,32 @@ int main(void) {
 
     initTimer();
     initIOMODER();
+    display_init();
 
     while(1) {
 		//phasen checken, oldphase newphase implementieren
     newPhase = readCurrentPhase();
 		currTime = getTimeStamp();
 
-		uint32_t deltaTime = currTime - lastTime;
+    double deltaTime = (currTime - lastTime) / 90e6;
 
     fsm_update(newPhase);
-    status = fsm_get_direction();
 
-		if(((deltaTime > 0,25) && (oldPhase != newPhase)) || (deltaTime > 0,5))
+		if(((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5))
 		{
 			newPhaseCounter = fsm_get_counter();
 			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
       angle = calculateAngle(stepCounter);
-			oldPhaseCounter = newPhaseCounter;
-      prepareLCDUpdate(angle, velocity);
+
+      prepareAngleBuffer(angle);
+      prepareVelocityBuffer(velocity);
+
+      oldPhaseCounter = newPhaseCounter;
+      lastTime = currTime;
       
 		}
+
+    status = fsm_get_direction();
 
     switch(status)
     {
@@ -92,7 +97,7 @@ int main(void) {
 
     setStepLEDs(newPhaseCounter);
     // wenn geprintet werden muss 
-    
+
     processLCDUpdate();
 		
 

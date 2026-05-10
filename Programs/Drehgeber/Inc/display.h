@@ -2,14 +2,17 @@
 #define DISPLAY_H
 
 
-#define STARTY 0
-#define STARTX 0
+#define ANGLEY 28
+#define ANGLEX 0
+#define VELOCITY_Y 1
+#define VELOCITYX 16
 
 void display_init(void);
 
 void display_update(double winkel, double Geschwinigkeit);
 
-void prepareLCDUpdate(double angle, double velocity);
+void prepareVelocityBuffer(double velocity);
+void prepareAngleBuffer(double Angle);
 
 void processLCDUpdate(void);
 
