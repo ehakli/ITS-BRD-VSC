@@ -70,10 +70,7 @@ char fsm_get_direction(void) /*gibt die aktuelle drehrichtung*/
 {
     return direction;
 }
-void fsm_reset_error(void) /*setzt den fehler wieder auf kein feheler*/
-{
-    error = 0;
-}
+
 void fsm_reset_counter(void) /*setzt den zähler zurück und setzt drehrichtung auf stillstehnd*/
 {
     phasen_counter = 0; direction = 'i';

@@ -1,4 +1,6 @@
+#include "testsoftware.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 #ifndef GPIO_H
 #define GPIO_H
@@ -22,6 +24,8 @@
 #define MODER_MASK_PIND 0x0000FFFFU // nur d8-d15
 #define MODER_OUT_PIND 0x00005555U // 8*01 in Hex
 
+#define SCOPE_PIN 4
+
 typedef enum {
     PHASE_A = 0x0,
     PHASE_B = 0x2,
@@ -32,9 +36,10 @@ typedef enum {
 void setForwardLED();
 void setBackwardLED();
 void setErrorLED();
-void setStepLEDs(int counter);
+void setStepLEDs(int8_t counter);
 bool isErrorButtonPressed();
 Phase readCurrentPhase();
 void clearDirectionLEDs(void);
+void toggleSignal();
 #endif /* GPIO_H */
 // EOF

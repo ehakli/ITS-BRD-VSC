@@ -192,7 +192,6 @@ project:
       files:
         - file: Src/main.c
         - file: Src/fsm.c
-        - file: Src/timer.c
         - file: Src/gpio.c
         - file: Src/angle.c
         - file: Src/display.c

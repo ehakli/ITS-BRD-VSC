@@ -1,6 +1,4 @@
 
-
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "gpio.h"
@@ -24,10 +22,10 @@ void setErrorLED() // d21
 
 void toggleSignal() // für oszi
 {
-
+    GPIOE->ODR ^= (1U << SCOPE_PIN);
 }
 
-void setStepLEDs(int counter)
+void setStepLEDs(int8_t counter)
 {
     GPIOD->BSRR = counter;
 }
@@ -39,11 +37,10 @@ bool isErrorButtonPressed() // s5
 
 Phase readCurrentPhase()
 {
-    // GPIOF->MODER &= ~((0x03U << (2*0)) | (0x03U << (2*1)));
     return GPIOF->IDR & 0x03U;
 }
 
 void clearDirectionLEDs(void) 
 {
-    GPIOE->BSRR = (BSRR_MASK_PIN_7 << 16) | (BSRR_MASK_PIN_6 << 16) | (BSRR_MASK_PIN_5 << 16);
+    GPIOE->BSRR = (BSRR_MASK_PIN_7 << 16) | (BSRR_MASK_PIN_6 << 16) | (BSRR_MASK_PIN_5 << 16); 
 }

@@ -8,5 +8,6 @@
 double getVelocity(int phaseDiff, double deltaTime);
 double calculateAngle(int steps);
 
+
 #endif /* ANGLE_H */
 // EOF

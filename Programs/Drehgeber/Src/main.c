@@ -47,8 +47,9 @@ void handleError()
     }
   }
 }
-void initIOMODER(void) {
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7;
+void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
+{
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7; 
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6;
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;
 
@@ -64,12 +65,15 @@ int main(void) {
   initTimer();
   lastTime = getTimeStamp();
 
-  while (1) {
+  while (1) 
+  {
+    toggleSignal();
+    ///inputs holen
     newPhase = readCurrentPhase();
     currTime = getTimeStamp();
 
-    fsm_update(newPhase);
 
+    fsm_update(newPhase);
     if (fsm_get_direction() == 'e') 
     {
       handleError();
@@ -80,13 +84,13 @@ int main(void) {
       double deltaTime = (currTime - lastTime) / 90e6;
 
       if (((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5)) 
-      {
+      { //inputs verarbeiten
         newPhaseCounter = fsm_get_counter();
 
         velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
         angle = calculateAngle(newPhaseCounter);
 
-        prepareAngleBuffer(angle);
+        prepareAngleBuffer(angle); //für prints vorbereiten
         prepareVelocityBuffer(velocity);
 
         oldPhaseCounter = newPhaseCounter;
@@ -95,6 +99,7 @@ int main(void) {
 
       oldPhase = newPhase;
 
+      //outputs 
       switch (status) 
       {
       case 'i':
@@ -111,7 +116,8 @@ int main(void) {
     }
 
     setStepLEDs(newPhaseCounter);
-    processLCDUpdate();
+    processLCDUpdate(); 
+    toggleSignal();
   }
 }
 
