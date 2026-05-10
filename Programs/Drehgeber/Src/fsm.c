@@ -3,7 +3,6 @@
 
 static char last_phase = PHASE_B; /*Start*/
 static int phasen_counter = 0;
-static int error = 0;
 static char direction  = 'i'; /*indikator für die richtung startet bei i = idle*/
 
 
@@ -66,10 +65,7 @@ int fsm_get_counter(void) /*gibt die Anzahl der Phasenwechsel aus*/
 {
     return phasen_counter;
 }
-int fsm_has_error(void) /*gibt fehlerstatus*/
-{
-    return error;
-}
+
 char fsm_get_direction(void) /*gibt die aktuelle drehrichtung*/
 {
     return direction;
@@ -84,5 +80,5 @@ void fsm_reset_counter(void) /*setzt den zähler zurück und setzt drehrichtung 
 }
 void fsm_reset(void)
 {
-    phasen_counter = 0; direction = 'i'; last_phase = PHASE_B; error = 0;
+    phasen_counter = 0; direction = 'i'; last_phase = PHASE_B;
 }
