@@ -1,38 +1,20 @@
-/**
-  ******************************************************************************
-  * @file    main.c
-  * @author  Franz Korf
-  * @brief   Kleines Testprogramm fuer neu erstelle Fonts.
-  ******************************************************************************
-  */
-/* Includes ------------------------------------------------------------------*/
 
-#include "stm32f4xx_hal.h"
-#include "init.h"
 #include "LCD_GUI.h"
 #include "LCD_Touch.h"
-#include "lcd.h"
-#include "fontsFLASH.h"
 #include "additionalFonts.h"
-#include "error.h"
-#include "lcd.h"
-#include <stdint.h>
-#include <stdio.h>
-#include "gpio.h"
-#include "timer.h"
 #include "angle.h"
 #include "display.h"
+#include "error.h"
+#include "fontsFLASH.h"
 #include "fsm.h"
-/*Module : 
-timer.c (Zeitlesen und zeitspanne ausrechnen)
-FSM.c (Phasenerkeunng, zähler und fehlerstate)
-winkel.c (Winkel und Winkelgeschwindigkeit)
-gpio.c (signal einlesen und leuchten ansteuern)
-display.c (display ausgabe)
-main.c (superloop)*/
-// In discord server bit shifting gemacht
+#include "gpio.h"
+#include "init.h"
+#include "lcd.h"
+#include "stm32f4xx_hal.h"
+#include "timer.h"
+#include <stdint.h>
+#include <stdio.h>
 
-static int stepCounter;
 static int oldPhaseCounter = 0;
 static int newPhaseCounter;
 static double currTime;
@@ -43,95 +25,90 @@ static double velocity;
 static double angle;
 static int status;
 
-
-void initIOMODER(void)
+void handleError()
 {
+  bool ErrorHandled = false;
+  setErrorLED();
+  
+  while(!ErrorHandled)
+  {
+    if(isErrorButtonPressed())
+    {
+       oldPhaseCounter = 0;
+      newPhaseCounter = 0;
+      currTime = 0;
+      lastTime = 0;
+      oldPhase = PHASE_B;
+      velocity = 0;
+      angle = 0;
+      ErrorHandled = true;
+    }
+  }
+}
+void initIOMODER(void) {
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7;
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6; 
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;  
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6;
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;
 
   GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND;
-
 }
 
 int main(void) {
-    initITSboard();    // Initialisierung des ITS Boards
-    GUI_init(DEFAULT_BRIGHTNESS);
-    TP_Init(false);
+  initITSboard();
+  GUI_init(DEFAULT_BRIGHTNESS);
+  TP_Init(false);
 
-    initTimer();
-    lastTime = getTimeStamp();
-    initIOMODER();
-    display_init();
+  initIOMODER();
+  initTimer();
+  lastTime = getTimeStamp();
 
-    while(1) {
-		//phasen checken, oldphase newphase implementieren
+  while (1) {
     newPhase = readCurrentPhase();
-		currTime = getTimeStamp();
+    currTime = getTimeStamp();
 
     fsm_update(newPhase);
 
-    double deltaTime = (currTime - lastTime) / 90e6;
-
-		if(((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5))
-		{
-			newPhaseCounter = fsm_get_counter();
-
-			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
-      angle = calculateAngle(newPhaseCounter);
-
-      prepareAngleBuffer(angle);
-      prepareVelocityBuffer(velocity);
-
-      oldPhaseCounter = newPhaseCounter;
-      lastTime = currTime;
-		}
-
-    oldPhase = newPhase;
-
-
-    status = fsm_get_direction();
-
-    switch(status)
+    if (fsm_get_direction() == 'e') 
     {
-      case 'i': break;
-      case 'f': setForwardLED(); break;
-      case 'b': setBackwardLED(); break; 
-    }
+      handleError();
+    } 
+    else 
+    {
+      status = fsm_get_direction();
+      double deltaTime = (currTime - lastTime) / 90e6;
 
+      if (((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5)) 
+      {
+        newPhaseCounter = fsm_get_counter();
+
+        velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
+        angle = calculateAngle(newPhaseCounter);
+
+        prepareAngleBuffer(angle);
+        prepareVelocityBuffer(velocity);
+
+        oldPhaseCounter = newPhaseCounter;
+        lastTime = currTime;
+      }
+
+      oldPhase = newPhase;
+
+      switch (status) 
+      {
+      case 'i':
+        break;
+      case 'f':
+        setForwardLED();
+        break;
+      case 'b':
+        setBackwardLED();
+        break;
+      }
+    }
+    
     setStepLEDs(newPhaseCounter);
-    // wenn geprintet werden muss 
-
     processLCDUpdate();
-		
-
-        // uint8_t status = readCurrentPhase();
-		// phasediff berechnen (wenn nicht idle oder error)
-        // lcdPrintInt(status);
-        // signal lesen (gpios)
-        // FSM updaten
-        // alle 250-500ms dann WinkelGeschwindigkeit berechnen
-        //leds passend setzen
-        // wenn veränderung Display aktuallisieren
-        // schauen ob fehler (S6) und wenn ja löschen
-
-    }
+  }
 }
 
-
-/** gpio einlesen
-update fsm
-check error
-berechnungen machen, gpio outputs 
-
-wir erstellen einen buffer, der die zahlen als charArray speichert
-für prints: wir erstellen jedes mal wenn getvelocity gecalld wird, wird dieser buffer mit der neuen zahl überschrieben. wir starten bei einem iindex von 0 und geben nur einzelne
-ziffern aus anstatt ganze zahlen. nach dem ausgeben von einzelnen ziffern wird der index erhöht. basierend auf dem index können die print positionen auch gemacht werden
-dieses printen passiert außerhalb von unserem getVelocity block 
-´ß
-*/
-
-
-
 // EOF
-

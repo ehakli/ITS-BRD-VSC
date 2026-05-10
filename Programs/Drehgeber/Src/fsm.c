@@ -56,7 +56,7 @@ void fsm_update(Phase newphase) /*aktuallisiert die Phase*/
     }
     else
     {
-        error = 1;
+        direction = 'e';
     }
 
     last_phase = new_phase;

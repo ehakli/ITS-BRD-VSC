@@ -2,10 +2,10 @@
 #define DISPLAY_H
 
 
-#define ANGLEY 8
+#define ANGLEY 0
 #define ANGLEX 0
 #define VELOCITY_Y 1
-#define VELOCITYX 16
+#define VELOCITYX 0
 
 void display_init(void);
 
