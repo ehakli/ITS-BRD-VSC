@@ -8,7 +8,6 @@
 
 
 
-#include "testsoftware.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -84,7 +83,7 @@ void setErrorLED();
 * @param counter Anzahl von Schritten
 * @retval void
 */
-void setStepLEDs(int8_t counter);
+void setStepLEDs(int counter);
 
 /** 
 ********************************************************************************

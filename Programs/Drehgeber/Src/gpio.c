@@ -30,7 +30,7 @@ void signalLow()
     GPIOE->BSRR = (BSRR_MASK_PIN_1_LOW);
 }
 
-void setStepLEDs(int8_t counter)
+void setStepLEDs(int counter)
 {
     GPIOD->BSRR = counter;
 }

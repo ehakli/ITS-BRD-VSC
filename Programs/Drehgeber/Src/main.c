@@ -53,9 +53,9 @@ void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6;
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;
 
-  GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND; // button
+  GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND; // counter
 
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_1) | MODER_OUT_PIN_1; // togglerLED
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_1) | MODER_OUT_PIN_1; // signalLED
 }
 
 int main(void) {
@@ -82,7 +82,7 @@ int main(void) {
     else 
     {
       status = fsm_get_direction();
-      double deltaTime = (currTime - lastTime) / 90e6;
+      double deltaTime = (currTime - lastTime) / TICKS_PER_SEC;
 
       if (((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5)) 
       { //inputs verarbeiten
@@ -104,6 +104,7 @@ int main(void) {
       switch (status) 
       {
       case 'i':
+        clearDirectionLEDs();
         break;
       case 'f':
         clearDirectionLEDs();
@@ -119,7 +120,7 @@ int main(void) {
     setStepLEDs(newPhaseCounter);
     signalHigh();
     processLCDUpdate(); 
-    signalLow();
+    signalLow ();
   }
 }
 

@@ -10,6 +10,7 @@
 #define ANGLE_H
 
 #define ANGLE_PER_PHASE 0.3
+#define TICKS_PER_SEC 90e6
 
 /** 
 ********************************************************************************
