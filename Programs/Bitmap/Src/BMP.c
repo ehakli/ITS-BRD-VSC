@@ -73,10 +73,10 @@ static int bmp_decodePixels(void)
                 b = pixel.rgbtBlue;
             }
             uint16_t color = bmp_toRGB565(r,g,b);
-
+            Coordinate point = {(uint16_t)i, (uint16_t)y_display};
             if(i < 480 && y_display < 320)
             {
-                GUI_drawPoint(i, y_display, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
             }
         }
         for(int o = 0; o < padding; o++)
@@ -89,7 +89,7 @@ static int bmp_decodePixels(void)
 
 void bmp_displayNext(void)
 {
-    GUI_clear();
+    GUI_clear(WHITE);
     openNextFile();
 
     if(EOK != bmp_readFileHeader()) return;
