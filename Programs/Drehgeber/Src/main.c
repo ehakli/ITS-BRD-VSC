@@ -49,9 +49,9 @@ void handleError()
 }
 void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
 {
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7; 
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6;
-  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7;
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_6) | MODER_OUT_PIN_6; 
+  GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_5) | MODER_OUT_PIN_5;  
 
   GPIOD->MODER = (GPIOD->MODER & ~MODER_MASK_PIND) | MODER_OUT_PIND; // counter
 
@@ -60,10 +60,10 @@ void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
 
 int main(void) {
   initITSboard();
-  GUI_init(DEFAULT_BRIGHTNESS);
-  TP_Init(false);
+    GUI_init(DEFAULT_BRIGHTNESS);
+    TP_Init(false);
 
-  initIOMODER();
+    initIOMODER();
   initTimer();
   lastTime = getTimeStamp();
 
@@ -71,7 +71,7 @@ int main(void) {
   {
     ///inputs holen
     newPhase = readCurrentPhase();
-    currTime = getTimeStamp();
+		currTime = getTimeStamp();
 
 
     fsm_update(newPhase);
@@ -81,28 +81,28 @@ int main(void) {
     } 
     else 
     {
-      status = fsm_get_direction();
+    status = fsm_get_direction();
       double deltaTime = (currTime - lastTime) / TICKS_PER_SEC;
 
       if (((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5)) 
       { //inputs verarbeiten
-        newPhaseCounter = fsm_get_counter();
+			newPhaseCounter = fsm_get_counter();
 
-        velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
+			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
         angle = calculateAngle(newPhaseCounter);
 
         prepareAngleBuffer(angle); //für prints vorbereiten
-        prepareVelocityBuffer(velocity);
+      prepareVelocityBuffer(velocity);
 
-        oldPhaseCounter = newPhaseCounter;
-        lastTime = currTime;
-      }
+      oldPhaseCounter = newPhaseCounter;
+      lastTime = currTime;
+		}
 
       oldPhase = newPhase;
 
       //outputs 
       switch (status) 
-      {
+    {
       case 'i':
         clearDirectionLEDs();
         break;
@@ -119,7 +119,7 @@ int main(void) {
 
     setStepLEDs(newPhaseCounter);
     signalHigh();
-    processLCDUpdate(); 
+    processLCDUpdate();
     signalLow ();
   }
 }
