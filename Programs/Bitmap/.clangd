@@ -1,5 +1,5 @@
 CompileFlags:
-  CompilationDatabase: c:\VS\ITS-BRD-VSC\Programs\Drehgeber\out\Drehgeber\ITSboard\Debug
+  CompilationDatabase: c:\VS\ITS-BRD-VSC\Programs\Bitmap\out\Bitmap\ITSboard\Debug
   Add:
     - "-D_ILP32=1\r\n"
     - "-D_USE_STATIC_INLINE=1\r\n"
@@ -411,23 +411,21 @@ CompileFlags:
     - "-D__thumb2__=1\r\n"
     - "-D__thumb__=1\r\n"
     - '-D__ARMCOMPILER_LIBCXX=1'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/Inc'
     - >-
-      -IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+      -IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     - >-
-      -IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../stm32cubef4/Drivers/CMSIS/Include
+      -IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../stm32cubef4/Drivers/CMSIS/Include
     - >-
-      -IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../stm32cubef4/Drivers/STM32F4xx_HAL_Driver/Inc
+      -IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../stm32cubef4/Drivers/STM32F4xx_HAL_Driver/Inc
     - >-
-      -IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../stm32cubef4/Drivers/BSP/STM32F4xx_Nucleo_144
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../stm32cubef4/Utilities/Fonts'
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../DisplayWaveshare/Inc'
-    - >-
-      -IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../ITS_BRD_LIB/Utilities/AddFonts
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/tmp/Drehgeber.Debug+ITSboard'
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/RTE/_Debug_ITSboard'
+      -IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../stm32cubef4/Drivers/BSP/STM32F4xx_Nucleo_144
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../stm32cubef4/Utilities/Fonts'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../DisplayWaveshare/Inc'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../ITS_BRD_LIB/Utilities/AddFonts'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/tmp/Bitmap.Debug+ITSboard'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/RTE/_Debug_ITSboard'
     - '-IC:/Users/Timo/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include'
     - >-
       -IC:/Users/Timo/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/../../ITS_BRD_LIB/Inc'
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/.'
-    - '-IC:/VS/ITS-BRD-VSC/Programs/Drehgeber/Inc'
+    - '-IC:/VS/ITS-BRD-VSC/Programs/Bitmap/../../ITS_BRD_LIB/Inc'
