@@ -1,5 +1,6 @@
 #include "BMP.h"
 #include "BMP_types.h"
+#include "LCD_general.h"
 #include "errorhandler.h"
 #include "LCD_GUI.h"
 #include "input.h"
@@ -97,6 +98,14 @@ static int bmp_decodePixelsTwo(void)
         int y_display = infoHeader.biHeight - 1; // Start unten
         bool endOfBitmap = false;
 
+        static COLOR compressedBuffer[480];
+
+        for(int i = 0; i<480; i++) //füllen, da manche bytes übersprungen werden, und wir diese trotzdem schreiben müssen. (außer writeline kann leere array stellen überspringen)
+        {
+            compressedBuffer[i] = WHITE;
+        }
+
+
         while (!endOfBitmap)
         {
             uint8_t byte1 = nextChar();
@@ -111,10 +120,11 @@ static int bmp_decodePixelsTwo(void)
 
                 for (int i = 0; i < byte1; i++)
                 {
-                    if (x < 480 && y_display >= 0 && y_display < 320)
+                    if (x < 480)
                     {
-                        Coordinate point = {(uint16_t)x, (uint16_t)y_display};
-                        GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                        //Coordinate point = {(uint16_t)x, (uint16_t)y_display};
+                        //GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                        compressedBuffer[x] = color;
                     }
                     x++;
                 }
@@ -125,16 +135,36 @@ static int bmp_decodePixelsTwo(void)
                 switch (byte2)
                 {
                     case 0: // EOL
+                    if(y_display >= 0 && y_display < 320 && x > 0) //all done?
+                    {
+                        Coordinate start = {0, (uint16_t)y_display};
+                        LENGTH length = (x < 480) ? (LENGTH)x : 480;
+                        GUI_WriteLine(start, length, compressedBuffer);
+                    }
                         x = 0;
                         y_display--;
+
+                        for(int i = 0; i < 480; i++) // buffer säubern, da da noch die alten farben drinne stehen
+                        {
+                            compressedBuffer[i] = WHITE;
+                        }
                         break;
-                    case 1: // bitmap ende
+
+                    case 1: // bitmap ende, zeiche noch einmal die Zeile davor
+                    if (y_display >= 0 && y_display < 320 && x > 0)
+                        {
+                            Coordinate start = {0, (uint16_t)y_display};
+                            LENGTH length = (x < 480) ? (LENGTH)x : 480;
+                            GUI_WriteLine(start, length, compressedBuffer);
+                        }
                         endOfBitmap = true;
                         break;
+
                     case 2: // Delta
                         x += nextChar();
                         y_display -= nextChar();
                         break;
+
                     default:
                         for (int i = 0; i < byte2; i++)
                         {
@@ -144,10 +174,11 @@ static int bmp_decodePixelsTwo(void)
                             uint8_t b = palette[index].rgbBlue;
                             uint16_t color = bmp_toRGB565(r, g, b);
 
-                            if (x < 480 && y_display >= 0 && y_display < 320)
+                            if (x < 480)
                             {
-                                Coordinate point = {(uint16_t)x, (uint16_t)y_display};
-                                GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                                //Coordinate point = {(uint16_t)x, (uint16_t)y_display};
+                                //GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                                compressedBuffer[x] = color;
                             }
                             x++;
                         }
@@ -167,9 +198,12 @@ static int bmp_decodePixelsTwo(void)
         int rowBytes = (((infoHeader.biWidth * infoHeader.biBitCount) + 31) / 32) * 4;
         int padding = rowBytes - (infoHeader.biWidth * (infoHeader.biBitCount / 8));
 
+        static COLOR buffer[480];
+
         for(int y_bmp = 0; y_bmp < infoHeader.biHeight; y_bmp++)
         {
             int y_display = (infoHeader.biHeight - 1) - y_bmp;
+
             for (int i = 0; i < infoHeader.biWidth; i++)
             {
                 uint8_t r, g, b;
@@ -192,14 +226,22 @@ static int bmp_decodePixelsTwo(void)
                 
                 if(i < 480 && y_display < 320)
                 {
-                    Coordinate point = {(uint16_t)i, (uint16_t)y_display};
-                    GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                    //Coordinate point = {(uint16_t)i, (uint16_t)y_display};
+                    //GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                    buffer[i] = color;
                 }
             }
             
             for(int o = 0; o < padding; o++)
             {
                 nextChar();
+            }
+
+            if(y_display >= 0 && y_display < 320)
+            {
+                Coordinate start = {0, (uint16_t)y_display};
+                LENGTH length = (infoHeader.biWidth < 480) ? (LENGTH)infoHeader.biWidth : 480;
+                GUI_WriteLine(start, length, buffer);
             }
         }
     }
