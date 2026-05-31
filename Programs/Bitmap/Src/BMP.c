@@ -1,3 +1,11 @@
+/**
+ ******************************************************************************
+ * @file    bmp.c
+ * @author  Timo Hinrichs, Emre Hakli
+ * @brief   Funktionen zum einlesen der Header, Paletten und Dekodieren der Pixel einer BMP Datei auf dem ITS-Board. 
+ ******************************************************************************
+ */
+
 #include "BMP.h"
 #include "BMP_types.h"
 #include "LCD_general.h"
