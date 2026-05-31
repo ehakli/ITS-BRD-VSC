@@ -15,22 +15,30 @@
 #include "fontsFLASH.h"
 #include "additionalFonts.h"
 #include "error.h"
+#include "BMP.h"
+#include "input.h"
 
+void pollUntilS5Pressed(void)
+{
+	while((GPIOF->IDR & (0x01U << 5))) {} 
+}
 
 int main(void) {
 	initITSboard();    // Initialisierung des ITS Boards
-	
 	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
 	TP_Init(false);                 // Initialisierung des LCD Boards mit Touch
+	initInput();
 
-  // Begruessungstext	
-	lcdPrintlnS("Hallo liebes TI-Labor (c-project)");
-	
+
 	// Test in Endlosschleife
-	while(1) {
-		HAL_Delay(10000);
-		
+	while(1) 
+	{
+		lcdGotoXY(10, 10);
+		bmp_displayNext();
+		pollUntilS5Pressed();
 	}
+
+	return 0;
 }
 
 // EOF

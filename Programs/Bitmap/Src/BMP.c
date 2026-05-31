@@ -3,7 +3,9 @@
 #include "errorhandler.h"
 #include "LCD_GUI.h"
 #include "input.h"
+#include <stdbool.h>
 #include <stdint.h>
+#include "lcd.h"
 
 static BITMAPFILEHEADER fileHeader;
 static BITMAPINFOHEADER infoHeader;
@@ -24,10 +26,10 @@ static int bmp_readFileHeader(void)
 
 static int bmp_readInfoHeader(void)
 {
-    RETURN_NOK_ON_ERR(1 != COMread((char*)&infoHeader, sizeof(BITMAPINFOHEADER),1), "Fehler!");
-    RETURN_NOK_ON_ERR(infoHeader.biSize != 0x28,"Fehler")
-    RETURN_NOK_ON_ERR(infoHeader.biBitCount != 8 && infoHeader.biBitCount != 24, "Fehler")
-    RETURN_NOK_ON_ERR(infoHeader.biCompression != BI_RGB && infoHeader.biCompression != BI_RLE8, "Fehler")
+    RETURN_NOK_ON_ERR(1 != COMread((char*)&infoHeader, sizeof(BITMAPINFOHEADER), 1), "Fehler!");
+    RETURN_NOK_ON_ERR(infoHeader.biSize != 0x28,"Falsche InfoHeader Groesse!")
+    RETURN_NOK_ON_ERR(infoHeader.biBitCount != 8 && infoHeader.biBitCount != 24, "Falsche Farbtiefe!")
+    RETURN_NOK_ON_ERR(infoHeader.biCompression != BI_RGB && infoHeader.biCompression != BI_RLE8, "Falsche Kompression!")
     return EOK;
 }
 
@@ -42,7 +44,7 @@ static int bmp_readPalette(void)
     {
         numColors = infoHeader.biClrUsed;
     }
-    RETURN_NOK_ON_ERR(numColors != COMread((char*)palette, sizeof(RGBQUAD), numColors), "Fehler!");
+    RETURN_NOK_ON_ERR(numColors != COMread((char*)palette, sizeof(RGBQUAD), numColors), "Fehler beim Palette einlesen!");
     return EOK;
 }
 
@@ -87,6 +89,124 @@ static int bmp_decodePixels(void)
     return EOK;
 }
 
+static int bmp_decodePixelsTwo(void)
+{
+    if (infoHeader.biCompression == BI_RLE8) // 8 compressed
+    {
+        int x = 0;
+        int y_display = infoHeader.biHeight - 1; // Start unten
+        bool endOfBitmap = false;
+
+        while (!endOfBitmap)
+        {
+            uint8_t byte1 = nextChar();
+            uint8_t byte2 = nextChar();
+
+            if (byte1 > 0)
+            {
+                uint8_t r = palette[byte2].rgbRed;
+                uint8_t g = palette[byte2].rgbGreen;
+                uint8_t b = palette[byte2].rgbBlue;
+                uint16_t color = bmp_toRGB565(r, g, b);
+
+                for (int i = 0; i < byte1; i++)
+                {
+                    if (x < 480 && y_display >= 0 && y_display < 320)
+                    {
+                        Coordinate point = {(uint16_t)x, (uint16_t)y_display};
+                        GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                    }
+                    x++;
+                }
+            }
+            else
+            {
+                // ESCAPE MODE
+                switch (byte2)
+                {
+                    case 0: // EOL
+                        x = 0;
+                        y_display--;
+                        break;
+                    case 1: // bitmap ende
+                        endOfBitmap = true;
+                        break;
+                    case 2: // Delta
+                        x += nextChar();
+                        y_display -= nextChar();
+                        break;
+                    default:
+                        for (int i = 0; i < byte2; i++)
+                        {
+                            uint8_t index = nextChar();
+                            uint8_t r = palette[index].rgbRed;
+                            uint8_t g = palette[index].rgbGreen;
+                            uint8_t b = palette[index].rgbBlue;
+                            uint16_t color = bmp_toRGB565(r, g, b);
+
+                            if (x < 480 && y_display >= 0 && y_display < 320)
+                            {
+                                Coordinate point = {(uint16_t)x, (uint16_t)y_display};
+                                GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                            }
+                            x++;
+                        }
+                        // ungerade
+                        if (byte2 % 2 != 0)
+                        {
+                            nextChar();
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    else //uncompressed
+    {
+        int rowBytes = (((infoHeader.biWidth * infoHeader.biBitCount) + 31) / 32) * 4;
+        int padding = rowBytes - (infoHeader.biWidth * (infoHeader.biBitCount / 8));
+
+        for(int y_bmp = 0; y_bmp < infoHeader.biHeight; y_bmp++)
+        {
+            int y_display = (infoHeader.biHeight - 1) - y_bmp;
+            for (int i = 0; i < infoHeader.biWidth; i++)
+            {
+                uint8_t r, g, b;
+                if(infoHeader.biBitCount == 8)
+                {
+                    int index = nextChar();
+                    r = palette[index].rgbRed;
+                    g = palette[index].rgbGreen;
+                    b = palette[index].rgbBlue;
+                }
+                else
+                {
+                    RGBTRIPLE pixel;
+                    COMread((char*)&pixel, sizeof(RGBTRIPLE), 1);
+                    r = pixel.rgbtRed;
+                    g = pixel.rgbtGreen;
+                    b = pixel.rgbtBlue;
+                }
+                uint16_t color = bmp_toRGB565(r, g, b);
+                
+                if(i < 480 && y_display < 320)
+                {
+                    Coordinate point = {(uint16_t)i, (uint16_t)y_display};
+                    GUI_drawPoint(point, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+                }
+            }
+            
+            for(int o = 0; o < padding; o++)
+            {
+                nextChar();
+            }
+        }
+    }
+    return EOK;
+}
+
+
 void bmp_displayNext(void)
 {
     GUI_clear(WHITE);
@@ -98,5 +218,6 @@ void bmp_displayNext(void)
     {
         if(EOK != bmp_readPalette()) return;
     }
-    bmp_decodePixels();
-}
+
+    bmp_decodePixelsTwo();
+} 
