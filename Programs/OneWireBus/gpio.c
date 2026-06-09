@@ -1,11 +1,60 @@
 #include <stdint.h>
 #define PIN_PD01 0x1
 #define PIN_PD00 0x0
-
+#define READ_ROM_COMMAND 0x33
 
 #include "stm32f429xx.h"
 #include "mysleep.h"
 #include "gpio.h"
+
+uint8_t romdata[8];
+
+
+void readRom()
+{
+    if(reset() == 1)
+    {
+        writeByte(0x33);
+
+        for(int i = 0; i < 8; i++)
+        {
+            romdata[i] = readByte();
+        }
+    }
+}
+
+uint8_t readByte()
+{
+    uint8_t value = 0;
+
+    for(int i=0; i<8; i++)
+    {
+        uint8_t bit = readBit();
+
+        value |= (bit << i);
+    }
+
+    return value;
+}
+
+
+void writeByte(uint8_t byte)
+{
+    for(int i=0; i<8; i++)
+    {
+        uint8_t bit = (byte >> i) & 1;
+
+        if(bit == 1)
+        {
+            writeOne();
+        }
+        else
+        {
+            writeZero();
+        }
+    }
+}
+
 
 uint8_t reset()
 {

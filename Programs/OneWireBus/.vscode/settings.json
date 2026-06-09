@@ -1,0 +1,7 @@
+{
+    "debug.hideSlowPreLaunchWarning": true,
+    "debug.showInStatusBar": "never",
+    "clangd.arguments": [
+        "--compile-commands-dir=c:\\GS\\ITS-BRD-VSC\\Programs\\OneWireBus\\out\\OneWireBus\\ITSboard\\Debug"
+    ]
+}
