@@ -18,5 +18,6 @@ void writeByte(uint8_t byte);
 uint8_t readByte(void);
 
 void readRom(void);
+uint8_t check_crc(uint8_t *data, uint8_t len);
 
 #endif // GPIO_H
