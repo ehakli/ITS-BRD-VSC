@@ -16,14 +16,23 @@
 #include "additionalFonts.h"
 #include "error.h"
 #include "timer.h"
+#include "gpio.h"
+#include <stdio.h>
+#include "mysleep.h"
 
 
-int main(void) {
+int main(void) 
+{
 	initITSboard();
 	GUI_init(DEFAULT_BRIGHTNESS); 
 	TP_Init(false);   
 	initTimer();              
 
+  while(1)
+  {
+    readRom();
+    sleep(1000000);
+    }
 }
 
 // EOF

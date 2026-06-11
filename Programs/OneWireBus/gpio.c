@@ -1,4 +1,7 @@
 #include <stdint.h>
+#include "lcd.h"
+#include <stdio.h>
+#include "LCD_GUI.h"
 #define PIN_PD01 0x1
 #define PIN_PD00 0x0
 #define READ_ROM_COMMAND 0x33
@@ -14,6 +17,8 @@ uint8_t romdata[8];
 
 void readRom()
 {
+    GUI_clear(WHITE);
+    lcdGotoXY(0,0);
     if(reset() == 1)
     {
         writeByte(READ_ROM_COMMAND);
@@ -23,20 +28,32 @@ void readRom()
             romdata[i] = readByte();
         }
 
-        uint8_t calculateed_crc = check_crc(romdata, sizeof(romdata));
+        uint8_t calculateed_crc = check_crc(romdata, CRC_LENGTH);
 
         if(calculateed_crc == romdata[CRC_POS])
         {
-            //print stuff crc richtig, family code 
+            lcdPrintlnS("ROM: ");
+            for(int b = 0; b < 8; b++)
+            {
+                char buf[32];
+                snprintf(buf, sizeof(buf), "%02X ", romdata[b]);
+                lcdPrintlnS(buf);
+            } 
+            char buf[32];
+            snprintf(buf, sizeof(buf), "\nFaily Code : %02X\n", romdata[0]);
+            lcdPrintlnS(buf);
+            lcdPrintlnS("CRC OK\n");
         }
         else
         {
-            // print stuff crc falsch
+            char buf[64];
+            snprintf(buf, sizeof(buf), "CRC FEHLER! BERECHNET: %02X, EMPFANGEN: %02X\n", calculateed_crc, romdata[CRC_POS]);
+            lcdPrintlnS(buf);
         }
     }
     else
     {
-        // print stuff kein sensor
+        lcdPrintS("Kein Sensor gefunden!\n");
     }
 }
 
