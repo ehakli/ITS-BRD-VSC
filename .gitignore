@@ -15,5 +15,6 @@
 .AppleDouble
 .LSOverride
 .vscode/
+**/.clangd
 # EOF
 
