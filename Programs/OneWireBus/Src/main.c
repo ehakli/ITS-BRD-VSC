@@ -21,17 +21,19 @@
 #include "mysleep.h"
 
 
-int main(void) 
+int main(void)
 {
-	initITSboard();
-	GUI_init(DEFAULT_BRIGHTNESS); 
-	TP_Init(false);   
-	initTimer();              
+    initITSboard();
+    GUI_init(DEFAULT_BRIGHTNESS);
+    TP_Init(false);
+    initTimer();
+    initPD1();
+    initPD0();
 
-  while(1)
-  {
-    readRom();
-    sleep(1000000);
+    while (1)
+    {
+        displayTemperatures();
+        sleep(1000000);
     }
 }
 
