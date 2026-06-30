@@ -15,6 +15,7 @@
 #define CRC_POS              7
 #define FAMILY_DS18B20       0x28
 #define FAMILY_DS18S20       0x10
+#define MAX_SENSORS 5
 
 
 void initPD1(void);

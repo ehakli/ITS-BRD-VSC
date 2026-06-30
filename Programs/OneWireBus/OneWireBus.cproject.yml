@@ -184,6 +184,7 @@ project:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
         - file: mysleep.h
         - file: gpio.h
+        - file: Inc/search.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -191,6 +192,7 @@ project:
         - file: Src/main.c
         - file: mysleep.c
         - file: gpio.c
+        - file: Src/search.c
 
   components:
     - component: ARM::CMSIS:CORE

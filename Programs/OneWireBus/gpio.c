@@ -237,6 +237,43 @@ int16_t readTemperature(uint8_t *rom_id)
 
 void displayTemperatures(void)
 {
+    uint8_t sensors[MAX_SENSORS][8] 
+    int sensor_count = 0;
+
+    lcdGotoXY(0, 0);
+
+    reset_search();
+
+    while((search()) && (sensor_count < MAX_SENSORS))
+    
+    
+
+    startConversion();
+
+    for (int s = 0; s < 4; s++)
+    {
+        int16_t temp = readTemperature(sensors[s]);
+        char buf[32];
+
+        if (temp == INT16_MIN)
+        {
+            snprintf(buf, sizeof(buf), "S%d: FEHLER\n", s + 1);
+        }
+        else
+        {
+            int16_t ganz     = temp / 16;
+            int16_t rest     = temp % 16;
+            if (rest < 0) rest = -rest;
+            uint16_t nachkomma = (uint16_t)rest * 625;
+            snprintf(buf, sizeof(buf), "S%d: %d.%04d C\n", s + 1, ganz, nachkomma);
+        }
+
+        lcdPrintlnS(buf);
+    }
+}
+
+/*void displayTemperatures(void)
+{
     uint8_t sensors[4][8] = {
         {0x28, 0x29, 0x7C, 0x54, 0x0F, 0x00, 0x00, 0xFB},
         {0x28, 0x09, 0x2A, 0x87, 0x0D, 0x00, 0x00, 0x82},
@@ -269,4 +306,4 @@ void displayTemperatures(void)
 
         lcdPrintlnS(buf);
     }
-}
+} */
