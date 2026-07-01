@@ -42,7 +42,7 @@ uint8_t search(void)
     {
         if(!reset())
         {
-            lcdPrintlnS("DEBUG 1: Reset fehlgeschlagen!\n");
+            lcdPrintlnS("reset fail\n"); //debug
             lastDiscrepanc = 0;
             lastDevice = false;
             return 0;
@@ -59,7 +59,7 @@ uint8_t search(void)
             if((id == 1) && (cmp_id == 1))
             {
                 char buf[32];
-                snprintf(buf, sizeof(buf), "DEBUG 2: Abbruch bei Bit %d\n", id_bit_num); // <--- DEBUG 2
+                snprintf(buf, sizeof(buf), "bit failure: %d\n", id_bit_num); // debug
                 lcdPrintlnS(buf);
                 break;
             }
@@ -91,18 +91,11 @@ uint8_t search(void)
                 if(search_direction == 1)
                 { //set bit
                     rom_num[romByteNum] |= rom_byte_mask;
+                    writeOne();
                 }
                 else
                 { //clear bit
                     rom_num[romByteNum] &= ~rom_byte_mask;
-                }
-
-                if(search_direction == 1)
-                {
-                    writeOne();
-                }
-                else
-                {
                     writeZero();
                 }
 
@@ -110,7 +103,7 @@ uint8_t search(void)
 
                 // index erhöhen
                 id_bit_num++;
-                // 
+                // verschieben, da die maske angepasst werden muiss um an der richtigen stelle im byte zu schreiben
                 rom_byte_mask <<= 1;
 
                 if(rom_byte_mask == 0) // wenn bei nächstem byte angekommen, da mask von 8 auf 0 flippt
@@ -135,7 +128,7 @@ uint8_t search(void)
         }
         else 
         {
-            lcdPrintlnS("DEBUG 3: CRC ist falsch!\n"); // <--- DEBUG 3
+            lcdPrintlnS("crc falsch!\n"); // debug
         }
 
     }
