@@ -1,6 +1,8 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#include <stdint.h>
+
 #define SEARCH_ROM_COMMAND 0xF0
 
 void reset_search(void);

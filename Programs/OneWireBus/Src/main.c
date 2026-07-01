@@ -19,6 +19,7 @@
 #include "gpio.h"
 #include <stdio.h>
 #include "mysleep.h"
+#include "search.h"
 
 
 int main(void)

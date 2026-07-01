@@ -6,8 +6,147 @@
 #include "stm32f429xx.h"
 #include "mysleep.h"
 #include "gpio.h"
+#include "search.h"
+
 
 uint8_t romdata[8];
+
+void startConversion(void)
+{
+    if (reset())
+    {
+        writeByte(SKIP_ROM_COMMAND);
+        writeByte(CONVERT_T_COMMAND);
+
+        GPIOD->OTYPER &= ~(1 << PIN_PD00);  // Push-Pull
+        GPIOD->BSRR = (1 << PIN_PD00);      // High
+        sleep(750000);
+
+        GPIOD->OTYPER |= (1 << PIN_PD00);   // Open-Drain
+        setIOHigh();
+    }
+}
+
+int16_t rawToTemp_x16(uint8_t *scratchpad, uint8_t family_code)
+{
+    if (family_code == FAMILY_DS18B20)
+    {
+        int16_t raw = (scratchpad[1] << 8) | scratchpad[0];
+        return raw;
+    }
+    else if (family_code == FAMILY_DS18S20)
+    {
+        int16_t raw = (int8_t)scratchpad[0];
+        return raw * 8;
+    }
+    return INT16_MIN;
+}
+
+int16_t readTemperature(uint8_t *rom_id)
+{
+    if (!reset()) return INT16_MIN;
+
+    writeByte(MATCH_ROM_COMMAND);
+    for (int i = 0; i < 8; i++)
+    {
+        writeByte(rom_id[i]);
+    }
+
+    writeByte(READ_SCRATCHPAD);
+
+    uint8_t scratchpad[9];
+    for (int i = 0; i < 9; i++)
+    {
+        scratchpad[i] = readByte();
+    }
+
+    if (check_crc(scratchpad, 8) != scratchpad[8]) return INT16_MIN;
+
+    return rawToTemp_x16(scratchpad, rom_id[0]);
+}
+
+void displayTemperatures(void)
+{
+    uint8_t sensors[MAX_SENSORS][8];
+    int sensor_count = 0;
+
+    lcdGotoXY(0, 0);
+
+    reset_search();
+
+    while((search()) && (sensor_count < MAX_SENSORS))
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            sensors[sensor_count][i] = rom_num[i];
+        }
+        sensor_count++;
+    }
+    if(sensor_count == 0)
+    {
+        lcdPrintlnS("kein sensor angeschlossen\n");
+        return;
+    }
+
+    startConversion(); // für alle sensoren
+
+    for(int i = 0; i < sensor_count; i++)
+    {
+        int16_t temp = readTemperature(sensors[i]);
+        char buffer[32];
+
+        if(temp == INT16_MIN)
+        {
+            snprintf(buffer, sizeof(buffer), "Sensor%d: FEHLER\n", i + 1);
+        }
+        else 
+        {
+            int16_t ganz = temp / 16;
+            int16_t rest = temp % 16; 
+            if(rest < 0) rest = -rest;
+
+            snprintf(buffer, sizeof(buffer), "Sensor%d: %d.%04d Grad Celsius", i + 1, ganz, rest);
+        }
+        lcdGotoXY(0, i);
+        lcdPrintlnS(buffer);
+    }
+}
+
+/*void displayTemperatures(void)
+{
+    uint8_t sensors[4][8] = {
+        {0x28, 0x29, 0x7C, 0x54, 0x0F, 0x00, 0x00, 0xFB},
+        {0x28, 0x09, 0x2A, 0x87, 0x0D, 0x00, 0x00, 0x82},
+        {0x28, 0x96, 0x7D, 0x54, 0x0F, 0x00, 0x00, 0x15},
+        {0x28, 0x5A, 0x42, 0x88, 0x0D, 0x00, 0x00, 0x40}
+    };
+
+    
+    lcdGotoXY(0, 0);
+
+    startConversion();
+
+    for (int s = 0; s < 4; s++)
+    {
+        int16_t temp = readTemperature(sensors[s]);
+        char buf[32];
+
+        if (temp == INT16_MIN)
+        {
+            snprintf(buf, sizeof(buf), "S%d: FEHLER\n", s + 1);
+        }
+        else
+        {
+            int16_t ganz     = temp / 16;
+            int16_t rest     = temp % 16;
+            if (rest < 0) rest = -rest;
+            uint16_t nachkomma = (uint16_t)rest * 625;
+            snprintf(buf, sizeof(buf), "S%d: %d.%04d C\n", s + 1, ganz, nachkomma);
+        }
+
+        lcdPrintlnS(buf);
+    }
+} */
 
 void readRom(void)
 {
@@ -180,130 +319,3 @@ void initPD0(void)
     GPIOD->OTYPER |= (1 << PIN_PD00);
     setIOHigh();
 }
-
-void startConversion(void)
-{
-    if (reset())
-    {
-        writeByte(SKIP_ROM_COMMAND);
-        writeByte(CONVERT_T_COMMAND);
-
-        GPIOD->OTYPER &= ~(1 << PIN_PD00);  // Push-Pull
-        GPIOD->BSRR = (1 << PIN_PD00);      // High
-        sleep(750000);
-
-        GPIOD->OTYPER |= (1 << PIN_PD00);   // Open-Drain
-        setIOHigh();
-    }
-}
-
-int16_t rawToTemp_x16(uint8_t *scratchpad, uint8_t family_code)
-{
-    if (family_code == FAMILY_DS18B20)
-    {
-        int16_t raw = (scratchpad[1] << 8) | scratchpad[0];
-        return raw;
-    }
-    else if (family_code == FAMILY_DS18S20)
-    {
-        int16_t raw = (int8_t)scratchpad[0];
-        return raw * 8;
-    }
-    return INT16_MIN;
-}
-
-int16_t readTemperature(uint8_t *rom_id)
-{
-    if (!reset()) return INT16_MIN;
-
-    writeByte(MATCH_ROM_COMMAND);
-    for (int i = 0; i < 8; i++)
-    {
-        writeByte(rom_id[i]);
-    }
-
-    writeByte(READ_SCRATCHPAD);
-
-    uint8_t scratchpad[9];
-    for (int i = 0; i < 9; i++)
-    {
-        scratchpad[i] = readByte();
-    }
-
-    if (check_crc(scratchpad, 8) != scratchpad[8]) return INT16_MIN;
-
-    return rawToTemp_x16(scratchpad, rom_id[0]);
-}
-
-void displayTemperatures(void)
-{
-    uint8_t sensors[MAX_SENSORS][8] 
-    int sensor_count = 0;
-
-    lcdGotoXY(0, 0);
-
-    reset_search();
-
-    while((search()) && (sensor_count < MAX_SENSORS))
-    
-    
-
-    startConversion();
-
-    for (int s = 0; s < 4; s++)
-    {
-        int16_t temp = readTemperature(sensors[s]);
-        char buf[32];
-
-        if (temp == INT16_MIN)
-        {
-            snprintf(buf, sizeof(buf), "S%d: FEHLER\n", s + 1);
-        }
-        else
-        {
-            int16_t ganz     = temp / 16;
-            int16_t rest     = temp % 16;
-            if (rest < 0) rest = -rest;
-            uint16_t nachkomma = (uint16_t)rest * 625;
-            snprintf(buf, sizeof(buf), "S%d: %d.%04d C\n", s + 1, ganz, nachkomma);
-        }
-
-        lcdPrintlnS(buf);
-    }
-}
-
-/*void displayTemperatures(void)
-{
-    uint8_t sensors[4][8] = {
-        {0x28, 0x29, 0x7C, 0x54, 0x0F, 0x00, 0x00, 0xFB},
-        {0x28, 0x09, 0x2A, 0x87, 0x0D, 0x00, 0x00, 0x82},
-        {0x28, 0x96, 0x7D, 0x54, 0x0F, 0x00, 0x00, 0x15},
-        {0x28, 0x5A, 0x42, 0x88, 0x0D, 0x00, 0x00, 0x40}
-    };
-
-    
-    lcdGotoXY(0, 0);
-
-    startConversion();
-
-    for (int s = 0; s < 4; s++)
-    {
-        int16_t temp = readTemperature(sensors[s]);
-        char buf[32];
-
-        if (temp == INT16_MIN)
-        {
-            snprintf(buf, sizeof(buf), "S%d: FEHLER\n", s + 1);
-        }
-        else
-        {
-            int16_t ganz     = temp / 16;
-            int16_t rest     = temp % 16;
-            if (rest < 0) rest = -rest;
-            uint16_t nachkomma = (uint16_t)rest * 625;
-            snprintf(buf, sizeof(buf), "S%d: %d.%04d C\n", s + 1, ganz, nachkomma);
-        }
-
-        lcdPrintlnS(buf);
-    }
-} */

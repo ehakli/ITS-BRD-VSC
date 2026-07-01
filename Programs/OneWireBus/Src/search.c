@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "search.h"
+#include "lcd.h"
+#include "stdio.h"
 
 uint8_t rom_num[8]; // speichert ROM
 uint8_t lastDiscrepanc; // speichert bit position, 
@@ -40,6 +42,7 @@ uint8_t search(void)
     {
         if(!reset())
         {
+            lcdPrintlnS("DEBUG 1: Reset fehlgeschlagen!\n");
             lastDiscrepanc = 0;
             lastDevice = false;
             return 0;
@@ -54,7 +57,13 @@ uint8_t search(void)
 
             // kein gerät angeschlossen
             if((id == 1) && (cmp_id == 1))
+            {
+                char buf[32];
+                snprintf(buf, sizeof(buf), "DEBUG 2: Abbruch bei Bit %d\n", id_bit_num); // <--- DEBUG 2
+                lcdPrintlnS(buf);
                 break;
+            }
+                
             else
             {
                 // alle geräte haben 0 oder 1
@@ -123,6 +132,10 @@ uint8_t search(void)
                 lastDevice = true;
             }
             result = true;
+        }
+        else 
+        {
+            lcdPrintlnS("DEBUG 3: CRC ist falsch!\n"); // <--- DEBUG 3
         }
 
     }

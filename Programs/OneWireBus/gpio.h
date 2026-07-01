@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <limits.h>
 
+extern uint8_t rom_num[8];
+
 #define PIN_PD01             0x1
 #define PIN_PD00             0x0
 #define READ_ROM_COMMAND     0x33
@@ -15,7 +17,7 @@
 #define CRC_POS              7
 #define FAMILY_DS18B20       0x28
 #define FAMILY_DS18S20       0x10
-#define MAX_SENSORS 5
+#define MAX_SENSORS 4
 
 
 void initPD1(void);

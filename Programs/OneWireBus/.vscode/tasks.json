@@ -8,10 +8,9 @@
             "options": {
                 "cwd": "${workspaceFolder}/",
                 "shell": {
-                    "executable": "cmd.exe",
+                    "executable": "/bin/bash",
                     "args": [
-                        "/d",
-                        "/c"
+                        "-c"
                     ]
                 }
             },
@@ -32,10 +31,9 @@
             "options": {
                 "cwd": "${workspaceFolder}/",
                 "shell": {
-                    "executable": "cmd.exe",
+                    "executable": "/bin/bash",
                     "args": [
-                        "/d",
-                        "/c"
+                        "-c"
                     ]
                 }
             },
@@ -55,10 +53,9 @@
             "options": {
                 "cwd": "${workspaceFolder}/",
                 "shell": {
-                    "executable": "cmd.exe",
+                    "executable": "/bin/bash",
                     "args": [
-                        "/d",
-                        "/c"
+                        "-c"
                     ]
                 }
             },
@@ -66,8 +63,6 @@
                 "gdbserver",
                 "--probe",
                 "stlink:",
-                "--connect",
-                "attach",
                 "--persist",
                 "--reset-run",
                 "--cbuild-run",
@@ -94,10 +89,9 @@
             "options": {
                 "cwd": "${workspaceFolder}/",
                 "shell": {
-                    "executable": "cmd.exe",
+                    "executable": "/bin/bash",
                     "args": [
-                        "/d",
-                        "/c"
+                        "-c"
                     ]
                 }
             },
