@@ -13,18 +13,47 @@
 #include "timer.h"
 #include <stdint.h>
 #include <stdio.h>
+#include "interrupts.h"
+
 
 static int oldPhaseCounter = 0;
 static int newPhaseCounter;
 static double currTime;
 static double lastTime;
 static Phase oldPhase = PHASE_B;
-static Phase newPhase;
+// static Phase newPhase;
 static double velocity;
 static double angle;
 static int status;
 
 volatile uint32_t isr_timestamp = 0; // neu
+
+
+void readSnapshot(int* ret_count, uint32_t *ret_time, char *ret_char)
+{
+    int cnt1, cnt2;
+    uint32_t time1, time2;
+    char dir1, dir2; 
+
+    do {
+      time1 = isr_timestamp;
+      cnt1 = fsm_get_counter();
+      dir1 = fsm_get_direction();
+
+      time2 = isr_timestamp;
+      cnt2 = fsm_get_counter();
+      dir2 = fsm_get_direction();
+
+    
+    } while((cnt1 != cnt2) || (time1 != time2) || (dir1 != dir2));
+
+    *ret_count = cnt1;
+    *ret_time = time1;
+    *ret_char = dir1;
+    
+}
+
+
 
 void handleError()
 {
@@ -48,7 +77,13 @@ void handleError()
       ErrorHandled = true;
     }
   }
+
+  isr_timestamp = getTimeStamp();
+  lastTime = isr_timestamp; // new
+
 }
+
+
 void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
 {
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_7) | MODER_OUT_PIN_7;
@@ -60,66 +95,66 @@ void initIOMODER(void) // erstmal bits an der stelle clearen, dann schreiben
   GPIOE->MODER = (GPIOE->MODER & ~MODER_MASK_PIN_1) | MODER_OUT_PIN_1; // signalLED
 }
 
-int main(void) {
-  initITSboard();
-    GUI_init(DEFAULT_BRIGHTNESS);
-    TP_Init(false);
+int main(void) 
+{
 
-    initIOMODER();
+  initITSboard();
+  GUI_init(DEFAULT_BRIGHTNESS);
+  TP_Init(false);
+  initIOMODER();
   initTimer();
+  initInterruptsRouting();
+
+
   lastTime = getTimeStamp();
+
+  int counter;
+  uint32_t time;
+  char direction;
 
   while (1) 
   {
-    ///inputs holen
-    newPhase = readCurrentPhase();
-		currTime = getTimeStamp();
-
-
-    fsm_update(newPhase);
+    readSnapshot(&counter, &time, &direction);
+    
     if (fsm_get_direction() == 'e') 
     {
+      NVIC_DisableIRQ(EXTI0_IRQn);
+      NVIC_DisableIRQ(EXTI1_IRQn);
+
       handleError();
+
+      NVIC_EnableIRQ(EXTI0_IRQn);
+      NVIC_EnableIRQ(EXTI1_IRQn);
     } 
     else 
     {
-    status = fsm_get_direction();
+
       double deltaTime = (currTime - lastTime) / TICKS_PER_SEC;
 
-      if (((deltaTime > 0.25) && (oldPhase != newPhase)) || (deltaTime > 0.5)) 
+      if (counter != oldPhaseCounter) 
       { //inputs verarbeiten
-			newPhaseCounter = fsm_get_counter();
 
-			velocity = getVelocity((newPhaseCounter - oldPhaseCounter), deltaTime);
-        angle = calculateAngle(newPhaseCounter);
+			  velocity = getVelocity((counter - oldPhaseCounter), deltaTime);
+        angle = calculateAngle(counter);
 
         prepareAngleBuffer(angle); //für prints vorbereiten
-      prepareVelocityBuffer(velocity);
+        prepareVelocityBuffer(velocity);
 
-      oldPhaseCounter = newPhaseCounter;
+      oldPhaseCounter = counter;
       lastTime = currTime;
 		}
-
-      oldPhase = newPhase;
 
       //outputs 
       switch (status) 
     {
-      case 'i':
-        clearDirectionLEDs();
-        break;
-      case 'f':
-        clearDirectionLEDs();
-        setForwardLED();
-        break;
-      case 'b':
-        clearDirectionLEDs();
-        setBackwardLED();
-        break;
+      case 'i': clearDirectionLEDs(); break;
+      case 'f': clearDirectionLEDs(); setForwardLED(); break;
+      case 'b': clearDirectionLEDs(); setBackwardLED(); break;
       }
     }
 
-    setStepLEDs(newPhaseCounter);
+    setStepLEDs(counter);
+
     signalHigh();
     processLCDUpdate();
     signalLow ();
