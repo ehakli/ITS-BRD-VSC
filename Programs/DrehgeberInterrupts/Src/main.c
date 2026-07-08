@@ -24,6 +24,8 @@ static double velocity;
 static double angle;
 static int status;
 
+volatile uint32_t isr_timestamp = 0; // neu
+
 void handleError()
 {
   bool ErrorHandled = false;

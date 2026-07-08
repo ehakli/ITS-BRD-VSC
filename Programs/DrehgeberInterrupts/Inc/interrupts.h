@@ -1,0 +1,1 @@
+extern volatile uint32_t isr_timestamp;

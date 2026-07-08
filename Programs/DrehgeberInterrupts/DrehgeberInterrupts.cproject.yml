@@ -186,6 +186,7 @@ project:
         - file: ../Drehgeber/gpio.h
         - file: ../Drehgeber/Inc/display.h
         - file: ../Drehgeber/Inc/fsm.h
+        - file: Inc/interrupts.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -196,7 +197,7 @@ project:
         - file: ../Drehgeber/Src/fsm.c
         - file: ../Drehgeber/Src/gpio.c
         - file: ../Drehgeber/Src/timer.c
-        - file: Src/isr.c
+        - file: Src/interrupts.c
 
   components:
     - component: ARM::CMSIS:CORE
