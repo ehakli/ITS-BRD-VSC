@@ -182,21 +182,21 @@ project:
     - group: Program/User/Inc
       files:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
-        - file: ../Drehgeber/angle.h
-        - file: ../Drehgeber/gpio.h
-        - file: ../Drehgeber/Inc/display.h
-        - file: ../Drehgeber/Inc/fsm.h
+        - file: ../DrehgeberInterrupts/Inc/angle.h
+        - file: ../DrehgeberInterrupts/Inc/gpio.h
+        - file: ../DrehgeberInterrupts/Inc/display.h
+        - file: ../DrehgeberInterrupts/Inc/fsm.h
         - file: Inc/interrupts.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
       files:
         - file: Src/main.c
-        - file: ../Drehgeber/Src/angle.c
-        - file: ../Drehgeber/Src/display.c
-        - file: ../Drehgeber/Src/fsm.c
-        - file: ../Drehgeber/Src/gpio.c
-        - file: ../Drehgeber/Src/timer.c
+        - file: ../DrehgeberInterrupts/Src/angle.c
+        - file: ../DrehgeberInterrupts/Src/display.c
+        - file: ../DrehgeberInterrupts/Src/fsm.c
+        - file: ../DrehgeberInterrupts/Src/gpio.c
+        - file: ../DrehgeberInterrupts/Src/timer.c
         - file: Src/interrupts.c
 
   components:
