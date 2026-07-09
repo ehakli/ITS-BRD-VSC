@@ -42,7 +42,7 @@ bool isErrorButtonPressed() // s5
 
 Phase readCurrentPhase()
 {
-    return GPIOF->IDR & 0x03U;
+    return GPIOG->IDR & 0x03U;
 }
 
 void clearDirectionLEDs(void) 

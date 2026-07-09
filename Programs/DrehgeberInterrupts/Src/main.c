@@ -105,8 +105,10 @@ int main(void)
   initTimer();
   initInterruptsRouting();
 
+  uint32_t startTime = getTimeStamp();
+  lastTime = startTime;
 
-  lastTime = getTimeStamp();
+  fsm_update(readCurrentPhase()); // anfangszustand
 
   int counter;
   uint32_t time;
@@ -115,8 +117,9 @@ int main(void)
   while (1) 
   {
     readSnapshot(&counter, &time, &direction);
+    uint32_t currentTime = getTimeStamp();
     
-    if (fsm_get_direction() == 'e') 
+    if (direction == 'i') 
     {
       NVIC_DisableIRQ(EXTI0_IRQn);
       NVIC_DisableIRQ(EXTI1_IRQn);
@@ -125,27 +128,40 @@ int main(void)
 
       NVIC_EnableIRQ(EXTI0_IRQn);
       NVIC_EnableIRQ(EXTI1_IRQn);
+
+
     } 
+    
     else 
     {
 
-      double deltaTime = (currTime - lastTime) / TICKS_PER_SEC;
+      double deltaTime = (double)(time - lastTime) / TICKS_PER_SEC;
 
-      if (counter != oldPhaseCounter) 
+      double timeDiff = (double)(currentTime - lastTime) / TICKS_PER_SEC;
+
+      if (((timeDiff > 0.25) && (oldPhaseCounter != counter)) || (timeDiff > 0.5)) 
       { //inputs verarbeiten
 
-			  velocity = getVelocity((counter - oldPhaseCounter), deltaTime);
+        if(oldPhaseCounter == counter || deltaTime <= 0) //ändert sich anders als angle immer, also hier stillstand erfassen
+        {
+          velocity = 0;
+        }
+        else 
+        {
+          velocity = getVelocity((counter - oldPhaseCounter), deltaTime); 
+        }
+
         angle = calculateAngle(counter);
 
         prepareAngleBuffer(angle); //für prints vorbereiten
         prepareVelocityBuffer(velocity);
 
       oldPhaseCounter = counter;
-      lastTime = currTime;
+      lastTime = currentTime; 
 		}
 
       //outputs 
-      switch (status) 
+      switch (direction) 
     {
       case 'i': clearDirectionLEDs(); break;
       case 'f': clearDirectionLEDs(); setForwardLED(); break;
