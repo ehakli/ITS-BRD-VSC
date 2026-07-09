@@ -43,7 +43,7 @@ void EXTI1_IRQHandler(void)
 
 void initInterruptsRouting()
 {
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN; // Clock for GPIO Port F
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN; // Clock for GPIO Port G
     RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN; // System conf. Clock enable
 
     SYSCFG->EXTICR[0] &= ~(0x0f << (4*0)); //Remove old selection
