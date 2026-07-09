@@ -8,6 +8,8 @@ extern volatile uint32_t isr_timestamp;
 
 void EXTI0_IRQHandler(void)
 {
+    signalHigh();
+
     uint32_t time = getTimeStamp();
     Phase phase = readCurrentPhase();
 
@@ -17,10 +19,14 @@ void EXTI0_IRQHandler(void)
         isr_timestamp = time;
         fsm_update(phase);
     }
+
+    signalLow();
 }
 
 void EXTI1_IRQHandler(void)
 {
+    signalHigh();
+
     uint32_t time = getTimeStamp();
     Phase phase = readCurrentPhase();
     
@@ -31,6 +37,8 @@ void EXTI1_IRQHandler(void)
         isr_timestamp = time;
         fsm_update(phase);
     }
+
+    signalLow();
 }
 
 void initInterruptsRouting()

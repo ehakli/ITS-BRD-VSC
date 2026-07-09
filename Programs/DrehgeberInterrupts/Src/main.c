@@ -19,7 +19,7 @@
 static int oldPhaseCounter = 0;
 static int newPhaseCounter;
 static double currTime;
-static double lastTime;
+static double lastPrintTime;
 static Phase oldPhase = PHASE_B;
 // static Phase newPhase;
 static double velocity;
@@ -69,7 +69,7 @@ void handleError()
       oldPhaseCounter = 0;
       newPhaseCounter = 0;
       currTime = 0;
-      lastTime = 0;
+      lastPrintTime = 0;
       oldPhase = PHASE_B;
       velocity = 0;
       angle = 0;
@@ -79,7 +79,7 @@ void handleError()
   }
 
   isr_timestamp = getTimeStamp();
-  lastTime = isr_timestamp; // new
+  lastPrintTime = isr_timestamp; // new
 
 }
 
@@ -105,10 +105,10 @@ int main(void)
   initTimer();
   initInterruptsRouting();
 
-  uint32_t startTime = getTimeStamp();
-  lastTime = startTime;
+  uint32_t startLoopTime = getTimeStamp();
+  lastPrintTime = startLoopTime;
 
-  fsm_update(readCurrentPhase()); // anfangszustand
+  fsm_update(readCurrentPhase()); 
 
   int counter;
   uint32_t time;
@@ -135,9 +135,9 @@ int main(void)
     else 
     {
 
-      double deltaTime = (double)(time - lastTime) / TICKS_PER_SEC;
+      double deltaTime = (double)(time - lastPrintTime) / TICKS_PER_SEC;
 
-      double timeDiff = (double)(currentTime - lastTime) / TICKS_PER_SEC;
+      double timeDiff = (double)(currentTime - lastPrintTime) / TICKS_PER_SEC;
 
       if (((timeDiff > 0.25) && (oldPhaseCounter != counter)) || (timeDiff > 0.5)) 
       { //inputs verarbeiten
@@ -157,7 +157,7 @@ int main(void)
         prepareVelocityBuffer(velocity);
 
       oldPhaseCounter = counter;
-      lastTime = currentTime; 
+      lastPrintTime = currentTime; 
 		}
 
       //outputs 
