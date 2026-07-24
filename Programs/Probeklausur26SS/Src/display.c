@@ -18,7 +18,7 @@
 
 #define DIGIT_X 17
 #define DIGIT_Y 24
-#define SPACER 6
+#define SPACER 8
 #define OFFSET 6*17
 #define BLOCK_X (SPACER+DIGIT_X*4)
 #define BLOCK_Y (SPACER+DIGIT_Y*4)
@@ -63,7 +63,7 @@ void initPiecePosition(int pos){
 	int row = pos / 3;
 
 	pieces[pos].tl.x = OFFSET + (col * (BLOCK_X + SPACER));
-	pieces[pos].tl.y = SPACER + (row * (BLOCK_Y + SPACER));
+	pieces[pos].tl.y = SPACER + (row * BLOCK_Y);
 
 	pieces[pos].br.x = pieces[pos].tl.x + BLOCK_X - SPACER;
 	pieces[pos].br.y = pieces[pos].tl.y + BLOCK_Y - SPACER;

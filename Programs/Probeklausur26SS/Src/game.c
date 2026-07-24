@@ -63,8 +63,6 @@ void startGame(void)
     bool leds[8];
     getPosLED(leds);
     setLEDs(leds);
-
-    
     if(checkGameOver())
     {
         if(getButton(0))
